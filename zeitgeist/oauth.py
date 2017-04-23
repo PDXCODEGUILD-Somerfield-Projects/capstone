@@ -18,3 +18,5 @@ def get_twitter_authorization_url():
     base_authorization_url = 'https://api.twitter.com/oauth/authorize'
     twitter_authorization_url = request_oauth.authorization_url(base_authorization_url)
     return twitter_authorization_url
+
+# def get_twitter_data(token):

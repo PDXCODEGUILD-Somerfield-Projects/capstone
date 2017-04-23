@@ -8,4 +8,12 @@ def home(request):
 
 
 def return_authorization(request):
-    return render(request, 'return_authorization.html', {'token': request.GET['oauth_token']})
+    # twitter_data = get_twitter_data(user_token)
+    twitter_response = render(request, 'return_authorization.html')
+    twitter_response.set_cookie('user_token', request.GET['oauth_token'])
+    return twitter_response
+
+
+def coordinates(request):
+    pass
+
