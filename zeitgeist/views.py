@@ -2,7 +2,7 @@ import json
 
 from django.shortcuts import render, redirect
 from json import dumps, loads
-from .oauth import get_oauth_request_token, get_access_token, build_oauth_url
+from .oauth import get_oauth_request_token, get_access_token, build_oauth_url, get_twitter_data
 from django.http import JsonResponse
 
 def home(request):
@@ -63,10 +63,9 @@ def authorization(request):
 def coordinates(request):
     my_lat = request.GET.get('lat')
     my_lng = request.GET.get('lng')
-    request.COOKIES['token']
-    # twitter_access = get_some_twitter_data(request, my_lat, my_lng)
-    # twitter_data.json()
-    # print(twitter_data)
+    twitter_token = request.COOKIES['token']
+    twitter_response = get_twitter_data(my_lat, my_lng, twitter_token)
+    print(twitter_response)
     lat_lng_json = JsonResponse({'lat': my_lat, 'lng': my_lng})
     return lat_lng_json
 

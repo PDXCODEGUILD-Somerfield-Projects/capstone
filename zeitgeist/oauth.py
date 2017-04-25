@@ -1,6 +1,8 @@
+from urllib.parse import quote
+
 from requests_oauthlib import OAuth1Session
 from .settings import TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET
-from json import dumps
+from json import dumps, loads
 from django.shortcuts import render, redirect
 
 TWITTER_REQUEST_TOKEN_URL = 'https://api.twitter.com/oauth/request_token'
@@ -40,6 +42,23 @@ def get_access_token(request):
     return access_token
 
 
+def build_query_string(lat, lng):
+    # percent encode the query string
+    q = ('q=&geocode=' + lat + ',' + lng + ',' +
+              '1mi&result_type=recent&count=100')
+    q = 'https://api.twitter.com/1.1/search/tweets.json?' + q
+    return q
+
+
+def get_twitter_data(latitude, longitude, access_token):
+    access_token_dict = loads(access_token)
+    oauth = OAuth1Session(
+        client_key=TWITTER_CONSUMER_KEY,
+        client_secret=TWITTER_CONSUMER_SECRET,
+        resource_owner_key=access_token_dict['oauth_token'],
+        resource_owner_secret=access_token_dict['oauth_token_secret'])
+    query_string = build_query_string(latitude, longitude)
+    return oauth.get(query_string).text
 
 
 # def request_twitter_token():

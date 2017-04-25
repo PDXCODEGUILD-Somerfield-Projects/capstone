@@ -23,6 +23,15 @@ function getUserLocation(result) {
     });
 }
 
+function testForNow(result){
+    return new Promise(function(resolve, reject) {
+    var latitude = '45.523062';
+    var longitude = '-122.676482';
+    var latLongArray = [latitude, longitude];
+    resolve(latLongArray);
+        })
+}
+
 
 function passLatLong(result) {
     var latitude = result[0];
@@ -36,6 +45,6 @@ function passLatLong(result) {
 
 $(document).ready(function() {
     $("#startbutton").click(function() {
-        getUserLocation().then(passLatLong);
+        testForNow().then(passLatLong);
     })
 });
