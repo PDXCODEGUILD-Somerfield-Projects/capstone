@@ -1,0 +1,5 @@
+Django==1.11
+oauthlib==2.0.2
+pytz==2017.2
+requests==2.13.0
+requests-oauthlib==0.8.0

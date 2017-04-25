@@ -7,7 +7,7 @@
 
 function getUserLocation(result) {
     return new Promise(function(resolve, reject) {
-        navigator.geolocation.getCurrentPosition((function(position) {
+        navigator.geolocation.getCurrentPosition(function(position) {
             var latitude = position.coords.latitude;
             var longitude = position.coords.longitude;
             var latLongArray = [latitude, longitude];
@@ -17,7 +17,9 @@ function getUserLocation(result) {
             } else {
                 reject(Error('Error--can\'t get position'));
             }
-        }));
+        }, function(error) {
+           console.log(error)
+        });
     });
 }
 

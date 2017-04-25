@@ -1,19 +1,72 @@
+import json
+
 from django.shortcuts import render, redirect
-from .oauth import get_twitter_authorization_url
+from json import dumps, loads
+from .oauth import get_oauth_request_token, get_access_token, build_oauth_url
+from django.http import JsonResponse
+
+def home(request):
+    return render(request, 'home.html')
 
 
 def home(request):
-    authorization_url = get_twitter_authorization_url()
-    return redirect(authorization_url)
+    if 'token' in request.COOKIES:
+        token = loads(request.COOKIES['token'])
+        print(token['oauth_token'], token['oauth_token_secret'])
+        return render(request, 'home.html')
+    else:
+        print('no token')
+        return get_oauth_request_token(
+            lambda key, secret: redirect(build_oauth_url(key, secret)),
+            lambda message: render(request, 'error.html', {'error': message}))
 
 
-def return_authorization(request):
-    # twitter_data = get_twitter_data(user_token)
-    twitter_response = render(request, 'return_authorization.html')
-    twitter_response.set_cookie('user_token', request.GET['oauth_token'])
-    return twitter_response
+def authorization(request):
+    access_token = get_access_token(request)
+    response = redirect('/home')
+    response.set_cookie('token', json.dumps(access_token))
+    return response
 
 
+
+# def home(request):
+#     token_oauth = OAuth1Session(TWITTER_CONSUMER_KEY, client_secret=TWITTER_CONSUMER_SECRET)
+#     twitter_token_request_url = 'https://api.twitter.com/oauth/request_token'
+#     fetch_response = token_oauth.fetch_request_token(twitter_token_request_url)
+#     resource_owner_key = fetch_response.get('oauth_token')
+#     resource_owner_secret = fetch_response.get('oauth_token_secret')
+#
+#
+#     request_oauth = OAuth1Session(TWITTER_CONSUMER_KEY, client_secret=TWITTER_CONSUMER_SECRET,
+#                                resource_owner_key=resource_owner_key, resource_owner_secret=resource_owner_secret)
+#     base_authorization_url = 'https://api.twitter.com/oauth/authorize'
+#     twitter_authorization_url = request_oauth.authorization_url(base_authorization_url)
+#
+#     response = redirect(twitter_authorization_url)
+#     response.set_cookie('resource_owner_key', resource_owner_key)
+#     response.set_cookie('resource_owner_secret', resource_owner_secret)
+#     return response
+#
+#
+# def return_authorization(request):
+#     oauth_response = render(request, 'authorization.html')
+#     oauth_response.set_cookie('oauth_token', request.GET['oauth_token'])
+#     verifier = request.GET['oauth_verifier']
+#     access_token = get_access_token(request, verifier)
+#     resource_owner_key_access_token = access_token.get('oauth_token')
+#     resource_owner_secret_access_token = access_token.get('oauth_token_secret')
+#     access_token.set_cookie('access_token', resource_owner_key_access_token)
+#     access_token.set_cookie('access_secret', resource_owner_secret_access_token)
+#
+#
+#
 def coordinates(request):
-    pass
+    my_lat = request.GET.get('lat')
+    my_lng = request.GET.get('lng')
+    request.COOKIES['token']
+    # twitter_access = get_some_twitter_data(request, my_lat, my_lng)
+    # twitter_data.json()
+    # print(twitter_data)
+    lat_lng_json = JsonResponse({'lat': my_lat, 'lng': my_lng})
+    return lat_lng_json
 
