@@ -23,14 +23,14 @@ function getUserLocation(result) {
     });
 }
 
-function testForNow(result){
-    return new Promise(function(resolve, reject) {
-    var latitude = '45.523062';
-    var longitude = '-122.676482';
-    var latLongArray = [latitude, longitude];
-    resolve(latLongArray);
-        })
-}
+// function testForNow(result){
+//     return new Promise(function(resolve, reject) {
+//     var latitude = '45.523062';
+//     var longitude = '-122.676482';
+//     var latLongArray = [latitude, longitude];
+//     resolve(latLongArray);
+//         })
+// }
 
 
 function passLatLong(result) {
@@ -45,6 +45,6 @@ function passLatLong(result) {
 
 $(document).ready(function() {
     $("#startbutton").click(function() {
-        testForNow().then(passLatLong);
+        getUserLocation().then(passLatLong);
     })
 });

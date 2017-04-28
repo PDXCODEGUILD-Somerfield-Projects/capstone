@@ -1,7 +1,10 @@
 import json
 
+
 from django.shortcuts import render, redirect
 from json import dumps, loads
+
+from zeitgeist.twitter_data import parse_twitter_data
 from .oauth import get_oauth_request_token, get_access_token, build_oauth_url, get_twitter_data
 from django.http import JsonResponse
 
@@ -65,7 +68,8 @@ def coordinates(request):
     my_lng = request.GET.get('lng')
     twitter_token = request.COOKIES['token']
     twitter_response = get_twitter_data(my_lat, my_lng, twitter_token)
-    print(twitter_response)
+    twitter_json_data = twitter_response.json()
+    parse_twitter_data(twitter_json_data)
     lat_lng_json = JsonResponse({'lat': my_lat, 'lng': my_lng})
     return lat_lng_json
 
