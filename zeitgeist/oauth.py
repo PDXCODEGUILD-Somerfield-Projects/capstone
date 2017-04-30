@@ -42,7 +42,7 @@ def get_access_token(request):
 
 def build_query_string(lat, lng):
     q = ('q=&geocode=' + lat + ',' + lng + ',' +
-              '5mi&result_type=recent&lang=en&count=100')
+              '5mi&result_type=recent&lang=en&count=3')
     q = 'https://api.twitter.com/1.1/search/tweets.json?' + q
     return q
 
@@ -56,60 +56,4 @@ def get_twitter_data(latitude, longitude, access_token):
         resource_owner_secret=access_token_dict['oauth_token_secret'])
     query_string = build_query_string(latitude, longitude)
     return oauth.get(query_string)
-
-
-# def request_twitter_token():
-#     '''Gets client token from Twitter'''
-#     token_oauth = OAuth1Session(TWITTER_CONSUMER_KEY, client_secret=TWITTER_CONSUMER_SECRET)
-#     twitter_token_request_url = 'https://api.twitter.com/oauth/request_token'
-#     fetch_response = token_oauth.fetch_request_token(twitter_token_request_url)
-#     return fetch_response
-
-
-# def get_twitter_authorization_url():
-#     token_oauth = OAuth1Session(TWITTER_CONSUMER_KEY, client_secret=TWITTER_CONSUMER_SECRET)
-#     twitter_token_request_url = 'https://api.twitter.com/oauth/request_token'
-#     fetch_response = token_oauth.fetch_request_token(twitter_token_request_url)
-#     resource_owner_key = fetch_response.get('oauth_token')
-#     resource_owner_secret = fetch_response.get('oauth_token_secret')
-#     request_oauth = OAuth1Session(TWITTER_CONSUMER_KEY, client_secret=TWITTER_CONSUMER_SECRET,
-#                                resource_owner_key=resource_owner_key, resource_owner_secret=resource_owner_secret)
-#     base_authorization_url = 'https://api.twitter.com/oauth/authorize'
-#     twitter_authorization_url = request_oauth.authorization_url(base_authorization_url)
-#     return twitter_authorization_url
-
-# def build_query_string(lat, lng):
-#     # percent encode the query string
-#     q = quote('?q=&geocode=' + lat + ',' + lng + ',' + '1mi&result_type=recent&count=100')
-#     return q
-
-#
-# def get_access_token(request, verifier):
-#     access_token_url = 'https://api.twitter.com/oauth/access_token'
-#     resource_owner_key = request.COOKIES.get('resource_owner_key')
-#     resource_owner_secret = request.COOKIES.get('resource_owner_secret')
-#     oauth = OAuth1Session(client_key=TWITTER_CONSUMER_KEY, client_secret=TWITTER_CONSUMER_SECRET,
-#                           resource_owner_key=resource_owner_key, resource_owner_secret=resource_owner_secret,
-#                           verifier=verifier)
-#     oauth_access_tokens = oauth.fetch_access_token(access_token_url)
-#     print('oauth_access_tokens: ' + oauth_access_tokens)
-#
-#     return oauth_access_tokens
-#
-#
-
-
-
-#
-#
-# def get_some_twitter_data(request, lat, lng):
-#     resource_owner_key = request.COOKIES.get('resource_owner_key')
-#     resource_owner_secret = request.COOKIES.get('resource_owner_secret')
-#     twitter_search_url = 'https://api.twitter.com/1.1/search/tweets.json'
-#     twitter_query = build_query_string(lat, lng)
-#     oauth = OAuth1Session(client_key=TWITTER_CONSUMER_KEY, client_secret=TWITTER_CONSUMER_SECRET,
-#                           resource_owner_key=resource_owner_key, resource_owner_secret=resource_owner_secret)
-#     twitter_data = oauth.get(twitter_search_url + twitter_query)
-#     print(twitter_data)
-#     return twitter_data
 

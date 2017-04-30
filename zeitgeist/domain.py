@@ -100,12 +100,10 @@ class Post(object):
         self.text = text
 
     def __repr__(self):
-        return 'Post({!r}, {!r}, {!r}, {!r})'.format(
-            self.platform,
-            self.user_name,
-            self.post_time,
-            self.text
-        )
+        date_str_format = '%m/%d/%y %H:%M:%S %Z'
+        formatted_post_time = datetime.strftime(self.post_time, date_str_format)
+        return 'Post(' + self.platform + ', ' + formatted_post_time + ', @' + self.user_name + ', ' + self.text + ')'
+
     def __eq__(self, other):
         return (
             self.platform == other.platform and
@@ -134,7 +132,7 @@ class Tweet(Post):
         date_str_format = '%m/%d/%y %H:%M:%S %Z'
         formatted_post_time = datetime.strftime(self.post_time, date_str_format)
 
-        return 'Tweet(' + formatted_post_time + ', ' + self.user_name + ', ' + self.text + ', '\
+        return 'Tweet(' + formatted_post_time + ', @' + self.user_name + ', ' + self.text + ', '\
                + str(self.is_retweet) + ', ' + str(self.hashtags) + ', ' + str(self.user_mentions) + ', '\
                + str(self.urls) + ')'
 
