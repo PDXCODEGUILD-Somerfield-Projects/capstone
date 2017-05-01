@@ -85,7 +85,10 @@ def deserialized_twitter_data(data):
         if is_retweet == True:
             clean_text = re.sub(r'^RT\s:\s', '', clean_text)
         clean_text = re.sub(r'\sb/c\s', ' because ', clean_text)
-        clean_text = re.sub(r'\s&amp;\s', ' and ', clean_text)
+        clean_text = re.sub(r'&amp;', 'and', clean_text)
+        clean_text = re.sub(r'\severy1\s', ' everyone ', clean_text)
+        clean_text = re.sub(r'\s@\s', ' at ', clean_text)
+        clean_text = re.sub(r'\sr\s', ' are ', clean_text)
         clean_text = re.sub(r'(\r\n|\r|\n)|\s{2,}', ' ', clean_text)
         clean_text = re.sub(r'https:.+?\s', ' ', clean_text)
 
@@ -97,6 +100,7 @@ def deserialized_twitter_data(data):
 
     return tweets
 
+
 def pull_tweet_text(tweets):
     '''Uses python-rake to create a list of key words and phrases with ranking
 
@@ -104,13 +108,20 @@ def pull_tweet_text(tweets):
     :return:
     '''
     compile_text = ''
+    rake_count_list = []
     for tweet in tweets:
         compile_text += tweet.clean_text
     Rake = RAKE.Rake('zeitgeist/EnglishStopList')
     raked = Rake.run(compile_text)
     # search for most common instances of these words/phrases
-    print(compile_text)
-    print(raked)
+    for pair in raked:
+        rake_num = compile_text.count(pair[0])
+        if rake_num > 1:
+            rake_unit = (pair[0], rake_num)
+            rake_count_list.append(rake_unit)
+    print(rake_count_list)
+    return rake_count_list
+
 
 def find_most_common_parcels(tweets, parcel_type):
     '''Finds the 10 most common parcel strings in list of Tweets
@@ -126,6 +137,8 @@ def find_most_common_parcels(tweets, parcel_type):
         # [Hashtag('Twitter', 'NewYorkTimes'), Hashtag('Twitter', 'Technology')]
         all_parcel_list += [parcel.text for parcel in parcel_list if len(parcel_list) > 0]
     parcel_dict = Counter(all_parcel_list)
-    print(parcel_dict.most_common(10))
+    most_common =  parcel_dict.most_common(10)
+    print(most_common)
+    return most_common
 
 

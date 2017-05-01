@@ -4,7 +4,7 @@ import json
 import re
 from django.test import TestCase
 
-from zeitgeist.twitter_data import deserialized_twitter_data, pull_tweet_text
+from zeitgeist.twitter_data import deserialized_twitter_data, pull_tweet_text, find_most_common_parcels
 from .domain import Post, Parcel, Hashtag, UserMention, Url, Tweet, format_datetime
 
 
@@ -82,7 +82,16 @@ class LogicTest(TestCase):
         self.assertEqual(deserialized, [Tweet('HeliumComedyPdx', datetime.datetime(2017, 4, 28, 18, 55, 18, tzinfo=datetime.timezone.utc), 'RT @StephKralevich: Our interview with comedy star @tomgreenlive @HeliumComedyPdx .  He talks movies, sausages, Portland &amp; @LeahTiscione ht…', True, [], [UserMention('Twitter', 'StephKralevich'), UserMention('Twitter', 'tomgreenlive'), UserMention('Twitter', 'HeliumComedyPdx'), UserMention('Twitter', 'LeahTiscione')], [], 'Our interview with comedy star . He talks movies, sausages, Portland and ht…'), Tweet('elementaltech', datetime.datetime(2017, 4, 28, 18, 55, 17, tzinfo=datetime.timezone.utc), 'Application Brief: How @AWS @NASA and @elementaltech delivered the first live 4K video from space:… https://t.co/EBqERuI3sF', False, [], [UserMention('Twitter', 'AWS'), UserMention('Twitter', 'NASA'), UserMention('Twitter', 'elementaltech')], [Url('Twitter', 'https://t.co/EBqERuI3sF')], 'Application Brief: How and delivered the first live 4K video from space:… )'), Tweet('LHowlettODPrism', datetime.datetime(2017, 4, 28, 18, 55, 16, tzinfo=datetime.timezone.utc), 'Just b/c you worship the #ProsperityGospel doesn\'t mean you demonize the poor &amp; vulnerable living in the austerity hostel. Don\'t be hostile.', False, [Hashtag('Twitter', 'ProsperityGospel')], [], [], 'Just because you worship the doesn\'t mean you demonize the poor and vulnerable living in the austerity hostel. Don\'t be hostile.')])
 
         raked_text = pull_tweet_text(deserialized)
-        self.assertEqual(raked_text, [('live 4k video', 9.0), ('comedy star', 4.0), ('talks movies', 4.0), ('ht… application', 4.0), ('vulnerable living', 4.0), ('austerity hostel', 4.0), ('interview', 1.0), ('sausages', 1.0), ('portland', 1.0), ('delivered', 1.0), ('space', 1.0), ('worship', 1.0), ('doesn', 1.0), ('demonize', 1.0), ('poor', 1.0), ('don', 1.0), ('hostile', 1.0), ('…', 0)])
+        self.assertEqual(raked_text, [('…', 2)])
+
+        test_hashtags = find_most_common_parcels(deserialized, 'hashtags')
+        self.assertEqual(test_hashtags, [('ProsperityGospel', 1)])
+
+        test_user_mentions = find_most_common_parcels(deserialized, 'user_mentions')
+        self.assertEqual(test_user_mentions, [('StephKralevich', 1), ('tomgreenlive', 1), ('HeliumComedyPdx', 1), ('LeahTiscione', 1), ('AWS', 1), ('NASA', 1), ('elementaltech', 1)])
+
+        test_urls = find_most_common_parcels(deserialized, 'urls')
+        self.assertEqual(test_urls, [('https://t.co/EBqERuI3sF', 1)])
 
 
 
