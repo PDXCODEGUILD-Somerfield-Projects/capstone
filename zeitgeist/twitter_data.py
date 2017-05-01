@@ -4,7 +4,7 @@ import RAKE
 
 import re
 
-from zeitgeist.domain import format_datetime, Tweet
+from zeitgeist.domain import format_datetime, Tweet, Hashtag, UserMention, Url
 
 
 def deserialized_twitter_data(data):
@@ -38,7 +38,8 @@ def deserialized_twitter_data(data):
         tweet_hashtag_list = []
         hashtag_indices_list = []
         for tag in tweet.get('entities')['hashtags']:
-            tweet_hashtag_list.append(tag['text'])
+            this_hashtag = Hashtag('Twitter', tag['text'])
+            tweet_hashtag_list.append(this_hashtag)
             hashtag_indices_list.append(tag['indices'])
         hashtags += tweet_hashtag_list
         hashtag_indices += hashtag_indices_list
@@ -48,7 +49,8 @@ def deserialized_twitter_data(data):
         tweet_user_mention_list = []
         user_mention_indices_list = []
         for mention in tweet['entities']['user_mentions']:
-            tweet_user_mention_list.append(mention['screen_name'])
+            this_user_mention = UserMention('Twitter', mention['screen_name'])
+            tweet_user_mention_list.append(this_user_mention)
             user_mention_indices_list.append(mention['indices'])
         user_mentions += tweet_user_mention_list
         user_mention_indices += user_mention_indices_list
@@ -58,7 +60,8 @@ def deserialized_twitter_data(data):
         url_indices_list = []
         tweet_url_list = []
         for url in tweet.get('entities')['urls']:
-            tweet_url_list.append(url['url'])
+            this_url = Url('Twitter', url['url'])
+            tweet_url_list.append(this_url)
             url_indices_list.append(url['indices'])
         urls += tweet_url_list
 
@@ -116,11 +119,12 @@ def find_most_common_parcels(tweets, parcel_type):
     :param parcel_type: 'hashtags', 'user_mentions', or 'urls'
     :return:
     '''
+    parcel_key_dict = {'hashtags': Hashtag, 'user_mentions': UserMention, 'urls': Url}
     all_parcel_list = []
     for tweet in tweets:
         parcel_list = getattr(tweet, parcel_type)
-        if len(parcel_list) > 0:
-            all_parcel_list += parcel_list
+        # [Hashtag('Twitter', 'NewYorkTimes'), Hashtag('Twitter', 'Technology')]
+        all_parcel_list += [parcel.text for parcel in parcel_list if len(parcel_list) > 0]
     parcel_dict = Counter(all_parcel_list)
     print(parcel_dict.most_common(10))
 
