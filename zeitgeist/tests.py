@@ -1,5 +1,7 @@
 import datetime
 import json
+
+import re
 from django.test import TestCase
 from .domain import Post, Parcel, Hashtag, UserMention, Url, Tweet, format_datetime
 
@@ -23,7 +25,7 @@ class LogicTest(TestCase):
         self.assertEqual(my_post.platform, 'Twitter')
         self.assertEqual('somename', my_post.user_name)
         self.assertEqual(datetime.datetime(2017, 4, 26, 17, 43, 16, tzinfo=datetime.timezone.utc), my_post.post_time)
-        self.assertEqual('This is what happens when a twit speaks:', my_post.text)
+        self.assertEqual('This is what happens when a twit speaks:', my_post.raw_text)
 
     def test_build_Parcel_structures(self):
         my_parcel = Parcel('Twitter', 'sometxt')
@@ -53,19 +55,20 @@ class LogicTest(TestCase):
         my_tweet = Tweet('someguy', some_datetime, 'This guys said some important stuff', False,
                          [Hashtag('Twitter', 'pdxrocks'), Hashtag('Twitter','codeisawesome')],
                          [UserMention('Twitter', 'somedude'), UserMention('Twitter', 'pythongal')],
-                         [Url('Twitter', 'https://t.co/Ymtxgvdx2u')])
+                         [Url('Twitter', 'https://t.co/Ymtxgvdx2u')], 'This guys said some important stuff')
         self.assertEqual(my_tweet.__repr__(), 'Tweet(04/27/17 15:27:48 UTC, @someguy, '
                                               'This guys said some important stuff, False, '
                                               '[#pdxrocks, #codeisawesome], [@somedude, @pythongal], '
-                                              '[https://t.co/Ymtxgvdx2u])')
+                                              '[https://t.co/Ymtxgvdx2u], This guys said some important stuff)')
         self.assertEqual(my_tweet.platform, 'Twitter')
         self.assertEqual(my_tweet.post_time, datetime.datetime(2017, 4, 27, 15, 27, 48, tzinfo=datetime.timezone.utc))
         self.assertEqual(my_tweet.user_name, 'someguy')
-        self.assertEqual(my_tweet.text, 'This guys said some important stuff')
+        self.assertEqual(my_tweet.raw_text, 'This guys said some important stuff')
         self.assertEqual(my_tweet.hashtags, [Hashtag('hashtag', 'pdxrocks'), Hashtag('hashtag', 'codeisawesome')])
         self.assertEqual(my_tweet.user_mentions, [UserMention('user_mention', 'somedude'),
                                                   UserMention('Twitter', 'pythongal')])
         self.assertEqual(my_tweet.urls, [Url('Twitter', 'https://t.co/Ymtxgvdx2u')])
+        self.assertEqual(my_tweet.clean_text, 'This guys said some important stuff')
 
     # test Twitter JSON deserialization
 
@@ -101,39 +104,73 @@ class LogicTest(TestCase):
 def deserialized_twitter_data(data):
     user_name = ''
     post_time = datetime
-    text = ''
+    raw_text = ''
     is_retweet = False
     tweets = []
 
     for tweet in data.get('statuses'):
 
         hashtags = []
+        hashtag_indices = []
         user_mentions = []
+        user_mention_indices = []
         urls = []
+        url_indices = []
+        tweet_indices_list = []
 
         user_name = tweet['user']['screen_name']
         post_time = format_datetime(tweet['created_at'])
-        text = tweet['text']
+        raw_text = tweet['text']
         is_retweet = True if 'retweeted_status' in tweet else False
 
         tweet_hashtag_list = []
+        hashtag_indices_list = []
         for tag in tweet.get('entities')['hashtags']:
             tweet_hashtag_list.append(tag['text'])
+            hashtag_indices_list.append(tag['indices'])
         hashtags += tweet_hashtag_list
+        hashtag_indices += hashtag_indices_list
 
         tweet_user_mention_list = []
+        user_mention_indices_list = []
         for mention in tweet['entities']['user_mentions']:
             tweet_user_mention_list.append(mention['screen_name'])
+            user_mention_indices_list.append(mention['indices'])
         user_mentions += tweet_user_mention_list
+        user_mention_indices += user_mention_indices_list
 
+        url_indices_list = []
         tweet_url_list = []
         for url in tweet.get('entities')['urls']:
             tweet_url_list.append(url['url'])
+            url_indices_list.append(url['indices'])
         urls += tweet_url_list
 
-        new_tweet = Tweet(user_name, post_time, text, is_retweet, hashtags, user_mentions, urls)
-        tweets.append(new_tweet)
 
+        # create a string of 'clean' text for parsing later
+        clean_text = ''
+
+        # add all of the tweet indices to one list and sort it
+        tweet_indices_list = hashtag_indices_list + user_mention_indices_list + url_indices_list
+        tweet_indices_list.sort()
+        # loop through the raw_text and add the text between hashtags, user_mentions, and urls to clean_text
+        for num, index in enumerate(tweet_indices_list):
+            if num == 0:
+                clean_text = raw_text[0:index[0]]
+            else:
+                clean_text += raw_text[tweet_indices_list[num - 1][1]: tweet_indices_list[num][0]]
+            if num == len(tweet_indices_list) - 1:
+                clean_text += raw_text[tweet_indices_list[num][1]:len(raw_text)]
+        # use regex to make these more readable
+        if is_retweet == True:
+            clean_text = re.sub(r'^RT\s:\s', '', clean_text)
+        clean_text = re.sub(r'\sb/c\s', ' because ', clean_text)
+        clean_text = re.sub(r'\s&amp;\s', ' and ', clean_text)
+        clean_text = re.sub(r'\s+', ' ', clean_text)
+
+        new_tweet = Tweet(user_name, post_time, raw_text, is_retweet, hashtags, user_mentions, urls, clean_text)
+
+        tweets.append(new_tweet)
 
     return tweets
 

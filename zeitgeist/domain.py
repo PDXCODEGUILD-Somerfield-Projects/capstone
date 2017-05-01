@@ -93,23 +93,23 @@ class Post(object):
         text: text in the post
 
     '''
-    def __init__(self, platform, user_name, post_time, text):
+    def __init__(self, platform, user_name, post_time, raw_text):
         self.platform = platform
         self.user_name = user_name
         self.post_time = post_time
-        self.text = text
+        self.raw_text = raw_text
 
     def __repr__(self):
         date_str_format = '%m/%d/%y %H:%M:%S %Z'
         formatted_post_time = datetime.strftime(self.post_time, date_str_format)
-        return 'Post(' + self.platform + ', ' + formatted_post_time + ', @' + self.user_name + ', ' + self.text + ')'
+        return 'Post(' + self.platform + ', ' + formatted_post_time + ', @' + self.user_name + ', ' + self.raw_text + ')'
 
     def __eq__(self, other):
         return (
             self.platform == other.platform and
             self.user_name == other.user_name and
             self.post_time == other.post_time and
-            self.text == other.text
+            self.raw_text == other.raw_text
         )
 
 class Tweet(Post):
@@ -121,27 +121,28 @@ class Tweet(Post):
         user_mentions: list of user_mentions
         urls: list of urls
     '''
-    def __init__(self, user_name, post_time, text, is_retweet, hashtags, user_mentions, urls):
-        Post.__init__(self, 'Twitter', user_name, post_time, text)
+    def __init__(self, user_name, post_time, raw_text, is_retweet, hashtags, user_mentions, urls, clean_text):
+        Post.__init__(self, 'Twitter', user_name, post_time, raw_text)
         self.is_retweet = is_retweet
         self.hashtags = hashtags
         self.user_mentions = user_mentions
         self.urls = urls
+        self.clean_text = clean_text
 
     def __repr__(self):
         date_str_format = '%m/%d/%y %H:%M:%S %Z'
         formatted_post_time = datetime.strftime(self.post_time, date_str_format)
 
-        return 'Tweet(' + formatted_post_time + ', @' + self.user_name + ', ' + self.text + ', '\
+        return 'Tweet(' + formatted_post_time + ', @' + self.user_name + ', ' + self.raw_text + ', '\
                + str(self.is_retweet) + ', ' + str(self.hashtags) + ', ' + str(self.user_mentions) + ', '\
-               + str(self.urls) + ')'
+               + str(self.urls) + ', ' + self.clean_text + ')'
 
 
     def __eq__(self, other):
         return (
             self.user_name == other.user_name and
             self.post_time == other.post_time and
-            self.text == other.text and
+            self.raw_text == other.raw_text and
             self.is_retweet == other.is_retweet and
             self.hashtags == other.hashtags and
             self.user_mentions == other.user_mentions and
