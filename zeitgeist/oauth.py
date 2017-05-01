@@ -1,7 +1,7 @@
 from requests_oauthlib import OAuth1Session
 from .settings import TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET
-from json import dumps, loads
-from django.shortcuts import render, redirect
+from json import loads
+
 
 TWITTER_REQUEST_TOKEN_URL = 'https://api.twitter.com/oauth/request_token'
 TWITTER_AUTHORIZATION_URL = 'https://api.twitter.com/oauth/authorize'
@@ -42,7 +42,7 @@ def get_access_token(request):
 
 def build_query_string(lat, lng):
     q = ('q=&geocode=' + lat + ',' + lng + ',' +
-              '5mi&result_type=recent&lang=en&count=3')
+              '5mi&result_type=recent&lang=en&count=100')
     q = 'https://api.twitter.com/1.1/search/tweets.json?' + q
     return q
 

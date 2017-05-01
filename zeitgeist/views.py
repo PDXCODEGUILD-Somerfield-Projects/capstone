@@ -5,6 +5,8 @@ from django.shortcuts import render, redirect
 from json import dumps, loads
 
 # from zeitgeist.twitter_data import parse_twitter_data
+from zeitgeist.twitter_data import deserialized_twitter_data, pull_tweet_text, \
+    find_most_common_parcels
 from .oauth import get_oauth_request_token, get_access_token, build_oauth_url, get_twitter_data
 from django.http import JsonResponse
 
@@ -38,7 +40,11 @@ def coordinates(request):
     twitter_response = get_twitter_data(my_lat, my_lng, twitter_token)
     # twitter_json_data = twitter_response.json()
     # parse_twitter_data(twitter_json_data)
-    # parse_twitter_data(twitter_response)
+    tweet_list = deserialized_twitter_data(twitter_response.json())
+    pull_tweet_text(tweet_list)
+    find_most_common_parcels(tweet_list, 'hashtags')
+    find_most_common_parcels(tweet_list, 'user_mentions')
+    find_most_common_parcels(tweet_list, 'urls')
     lat_lng_json = JsonResponse({'lat': my_lat, 'lng': my_lng})
     return lat_lng_json
 
