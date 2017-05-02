@@ -4,7 +4,6 @@ import json
 from django.shortcuts import render, redirect
 from json import dumps, loads
 
-# from zeitgeist.twitter_data import parse_twitter_data
 from zeitgeist.twitter_data import deserialized_twitter_data, pull_tweet_text, \
     find_most_common_parcels
 from .oauth import get_oauth_request_token, get_access_token, build_oauth_url, get_twitter_data
@@ -17,7 +16,6 @@ def home(request):
 def home(request):
     if 'token' in request.COOKIES:
         token = loads(request.COOKIES['token'])
-        print(token['oauth_token'], token['oauth_token_secret'])
         return render(request, 'home.html')
     else:
         print('no token')
@@ -38,13 +36,14 @@ def coordinates(request):
     my_lng = request.GET.get('lng')
     twitter_token = request.COOKIES['token']
     twitter_response = get_twitter_data(my_lat, my_lng, twitter_token)
-    # twitter_json_data = twitter_response.json()
-    # parse_twitter_data(twitter_json_data)
+
+    # deserialize the Twitter response json object into tweets
     tweet_list = deserialized_twitter_data(twitter_response.json())
     pull_tweet_text(tweet_list)
-    find_most_common_parcels(tweet_list, 'hashtags')
-    find_most_common_parcels(tweet_list, 'user_mentions')
-    find_most_common_parcels(tweet_list, 'urls')
+    hashtag_list = find_most_common_parcels(tweet_list, 'hashtags')
+    user_mention_list = find_most_common_parcels(tweet_list, 'user_mentions')
+    urls_list = find_most_common_parcels(tweet_list, 'urls')
+
     lat_lng_json = JsonResponse({'lat': my_lat, 'lng': my_lng})
     return lat_lng_json
 

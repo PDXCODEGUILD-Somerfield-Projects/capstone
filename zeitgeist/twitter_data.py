@@ -91,6 +91,7 @@ def deserialized_twitter_data(data):
         clean_text = re.sub(r'\sr\s', ' are ', clean_text)
         clean_text = re.sub(r'(\r\n|\r|\n)|\s{2,}', ' ', clean_text)
         clean_text = re.sub(r'https:.+?\s', ' ', clean_text)
+        clean_text = re.sub(r'…|-|//|', '', clean_text)
 
         # create a new tweet object from the deserialized json tweet
         new_tweet = Tweet(user_name, post_time, raw_text, is_retweet, hashtags, user_mentions, urls, clean_text)
@@ -108,19 +109,19 @@ def pull_tweet_text(tweets):
     :return:
     '''
     compile_text = ''
-    rake_count_list = []
+    rake_count_dict = {}
     for tweet in tweets:
         compile_text += tweet.clean_text
     Rake = RAKE.Rake('zeitgeist/EnglishStopList')
     raked = Rake.run(compile_text)
-    # search for most common instances of these words/phrases
+    # counts occurrences of each phrase/word from raked in the compiled text
+    # creates a tuple list of phrases/words and count (if the count is greater than 1)
     for pair in raked:
         rake_num = compile_text.count(pair[0])
         if rake_num > 1:
-            rake_unit = (pair[0], rake_num)
-            rake_count_list.append(rake_unit)
-    print(rake_count_list)
-    return rake_count_list
+            rake_count_dict[pair[0]] = rake_num
+    print(rake_count_dict)
+    return rake_count_dict
 
 
 def find_most_common_parcels(tweets, parcel_type):
@@ -130,15 +131,23 @@ def find_most_common_parcels(tweets, parcel_type):
     :param parcel_type: 'hashtags', 'user_mentions', or 'urls'
     :return:
     '''
+    # dict to match category to parcel object
     parcel_key_dict = {'hashtags': Hashtag, 'user_mentions': UserMention, 'urls': Url}
     all_parcel_list = []
+    most_common_dict = {}
+    # runs through the tweet objects in the list
     for tweet in tweets:
+        # if the parcel list is not empty, throws the parcel text into a list
         parcel_list = getattr(tweet, parcel_type)
-        # [Hashtag('Twitter', 'NewYorkTimes'), Hashtag('Twitter', 'Technology')]
         all_parcel_list += [parcel.text for parcel in parcel_list if len(parcel_list) > 0]
-    parcel_dict = Counter(all_parcel_list)
-    most_common =  parcel_dict.most_common(10)
-    print(most_common)
-    return most_common
+    # counts the occurrences of each parcel
+    parcel_count_list = Counter(all_parcel_list)
+    # returns the 10 most common parcels in [('phrase', 3), ('word', 2)] format
+    most_common =  parcel_count_list.most_common(10)
+    # cycle through the most_common list to create a dictionary in {'phrase': 3, 'word': 2} format
+    for pair in most_common:
+        most_common_dict[pair[0]] = pair[1]
+    print(most_common_dict)
+    return most_common_dict
 
 
