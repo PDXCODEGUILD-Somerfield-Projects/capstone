@@ -39,11 +39,13 @@ def coordinates(request):
 
     # deserialize the Twitter response json object into tweets
     tweet_list = deserialized_twitter_data(twitter_response.json())
-    pull_tweet_text(tweet_list)
+    # get a list of most common phrases/keywords
+    raked_list = pull_tweet_text(tweet_list)
+    # get the most common occurrences of hashtags, user_mentions, and urls
     hashtag_list = find_most_common_parcels(tweet_list, 'hashtags')
     user_mention_list = find_most_common_parcels(tweet_list, 'user_mentions')
     urls_list = find_most_common_parcels(tweet_list, 'urls')
-
-    lat_lng_json = JsonResponse({'lat': my_lat, 'lng': my_lng})
-    return lat_lng_json
+    # combine return lists into a json block and send it back to site.js
+    json_return = JsonResponse({'lat': my_lat, 'lng': my_lng, 'phrases': raked_list, 'hashtags': hashtag_list, 'user_mentions': user_mention_list, 'urls': urls_list})
+    return json_return
 

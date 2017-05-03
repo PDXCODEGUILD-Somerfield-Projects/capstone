@@ -98,6 +98,7 @@ def deserialized_twitter_data(data):
         print(clean_text)
         # add the tweet object to a list of tweet objects
         tweets.append(new_tweet)
+    print(tweets)
 
     return tweets
 
@@ -149,5 +150,7 @@ def find_most_common_parcels(tweets, parcel_type):
         most_common_dict[pair[0]] = pair[1]
     print(most_common_dict)
     return most_common_dict
+
+
 
 

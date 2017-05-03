@@ -34,13 +34,72 @@ function getUserLocation(result) {
 
 
 function passLatLong(result) {
+    console.log(result);
     var latitude = result[0];
     var longitude = result[1];
     $.get('/coordinates/', {lat: latitude, lng: longitude}, function(coordinates) {
-        $('#testdata').append('lat: ' + coordinates['lat']
+        console.log(coordinates);
+        var hashtag_data = coordinates.hashtags;
+        var hashtag_array = hashtag_data;
+        // document.getElementById('bubbles').setAttribute("width", 400);
+        // document.getElementById('bubbles').setAttribute("height", 400);
+
+        console.log(hashtag_data);
+        var diameter = 400;
+
+        var bubble = d3.pack()
+            .size([diameter, diameter])
+            .padding(1.5);
+
+        var svg = d3.select("#testdata")
+            .append("svg")
+            .attr("width", diameter)
+            .attr("height", diameter)
+            .attr("class", "bubble");
+
+
+        var bubbles = svg.append("g")
+            .attr("transform", "translate(0,0)")
+            .selectAll(".bubble")
+            .data([{'tag': 'Portland', 'count': 2}, {'tag': 'CyberSpaceWar', 'count': 3},
+            {'tag': 'AlaskaAirlines', 'count': 1}, {'tag': 'solidarity', 'count': 4}])
+            .enter();
+
+        bubbles.append("circle")
+            .attr("r", function(d) {return d.count*15})
+            .attr("cx", function() {return Math.random() *300 ;})
+            .attr("cy", function() {return Math.random() *300 ;})
+            .style("fill", function(d) {return color(d.count);});
+
+        bubbles.append("text")
+        .attr("x", function(d){ return d.x; })
+        .attr("y", function(d){ return d.y + 5; })
+        .attr("text-anchor", "middle")
+        .text(function(d){ return d.tag; });
+
+        // var svg = d3.select("#bubbles")
+        //     .selectAll("circle")
+        //     .data([{'tag': 'Portland', 'count': 2}, {'tag': 'CyberSpaceWar', 'count': 3},
+        //         {'tag': 'AlaskaAirlines', 'count': 1}, {'tag': 'solidarity', 'count': 4}])
+        //     .enter()
+        //     .append("circle")
+        //     .attr("cy", function() {return Math.random() * 400; })
+        //     .attr("cx", function() {return Math.random() * 400; })
+        //     .attr("r", function(d) {return Math.sqrt(d.count*3000)})
+        //     .append("title")
+        //     // // .attr("x", function(d) {return d.x; })
+        //     // // .attr("y", function(d) {return d.y +5;})
+        //     // .attr("text-anchor", "middle")
+        //     .text(function(d) {return d.tag;});
+
+
+
+
+
+        $('#bubbles').after('<p>lat: ' + coordinates['lat'] + '</p>'
             + '<p>' + 'lng: ' + coordinates['lng'] + '</p>');
-    });
-}
+        });
+    }
 
 
 $(document).ready(function() {

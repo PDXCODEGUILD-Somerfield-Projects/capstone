@@ -1,0 +1,21 @@
+
+
+rect {
+    width: 50px;
+    height: 50px;
+    stroke: black;
+    stroke-width: 1px;
+    fill: red;
+}
+
+circle {
+    stroke: black;
+    stroke-width: 1px;
+    fill: yellow;
+}
+
+circle.text {
+    fill: black;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 10px;
+}
