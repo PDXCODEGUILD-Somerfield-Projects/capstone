@@ -55,25 +55,27 @@ function passLatLong(result) {
 
         var color =  d3.scaleOrdinal(d3.schemeCategory20c);
 
+        // d3.json(coordinates, function(data) {console.log(data);});
+
         var node = svg.selectAll(".node")
-            .data(data_blob)
+            .data(hashtag_data)
             .enter()
             .append("g")
             .attr("class", "node");
 
 
         node.append("circle")
-            .attr("id", function(d) {return d.tag;})
+            .attr("id", function(d) {return d.hashtag;})
             .attr("cx", function() {return Math.random() * width})
             .attr("cy", function() {return Math.random() * height})
             .attr("r", function(d) {return d.count * 15})
             .attr("fill", function (d) {return color(d.count);});
 
         node.append("text")
-            .attr("x", function(d) {return d3.select("#" + d.tag).attr("cx")})
-            .attr("y", function(d) {return d3.select("#" + d.tag).attr("cy")})
+            .attr("x", function(d) {return d3.select("#" + d.hashtag).attr("cx")})
+            .attr("y", function(d) {return d3.select("#" + d.hashtag).attr("cy")})
             .attr("text-anchor", "middle")
-            .text(function(d) {return d.tag});
+            .text(function(d) {return d.hashtag});
 
 
         $('#bubbles').after('<p>lat: ' + coordinates['lat'] + '</p>'
