@@ -39,43 +39,80 @@ function passLatLong(result) {
     var longitude = result[1];
     $.get('/coordinates/', {lat: latitude, lng: longitude}, function(coordinates) {
         console.log(coordinates);
-        var hashtag_data = coordinates.hashtags;
-        var hashtag_array = hashtag_data;
-        document.getElementById('bubbles').setAttribute("width", 400);
-        document.getElementById('bubbles').setAttribute("height", 400);
+        var twitter_data = coordinates.twitter;
+        console.log(twitter_data);
 
-        console.log(hashtag_data);
 
-        var data_blob = [{'tag': 'Portland', 'count': 2}, {'tag': 'CyberSpaceWar', 'count': 3},
-            {'tag': 'AlaskaAirlines', 'count': 1}, {'tag': 'solidarity', 'count': 4}];
+        var diameter = 960;
+            // color = d3.scaleOrdinal(d3.schemeCategory20c);
 
-        var svg = d3.select("svg"),
-            width =+svg.attr('width'),
-            height = +svg.attr('height');
+        var color1 = d3.scaleLinear()
+                .domain([1, 10])
+                .range(['#CCFFDD','#00B33C'])
+                .interpolate(d3.interpolateHcl),
+            color2 = d3.scaleLinear()
+                .range(['#FFF0E6', 'FF6600'])
+                .interpolate(d3.interpolateHcl)
+                .domain([1, 10]),
+            color3 = d3.scaleLinear()
+                .range(['#C2D1F0', '#3366CC'])
+                .interpolate(d3.interpolateHcl)
+                .domain([1, 10]);
 
-        var color =  d3.scaleOrdinal(d3.schemeCategory20c);
+        var pack = d3.pack()
+            .size([diameter, diameter])
+            .padding(1.5);
 
-        // d3.json(coordinates, function(data) {console.log(data);});
+        var svg = d3.select("#testdata").append("svg")
+            .attr("width", diameter)
+            .attr("height", diameter)
+            .attr("class", "bubble");
+
+        var root = d3
+            .hierarchy({children:twitter_data})
+            .sum(function (d) {
+                return d.count;
+            })
+            .sort(function (a, b) {
+                return b.count - a.count;
+            });
+
+        d3.pack(root);
 
         var node = svg.selectAll(".node")
-            .data(hashtag_data)
-            .enter()
-            .append("g")
-            .attr("class", "node");
-
+            .data(pack(root).leaves())
+            .enter().append("g")
+            .attr("class", "node")
+            .attr("transform", function (d) {
+                return "translate(" + d.x + "," + d.y + ")";
+            });
 
         node.append("circle")
-            .attr("id", function(d) {return d.hashtag;})
-            .attr("cx", function() {return Math.random() * width})
-            .attr("cy", function() {return Math.random() * height})
-            .attr("r", function(d) {return d.count * 15})
-            .attr("fill", function (d) {return color(d.count);});
+            .attr("r", function (d) {
+                return d.r;
+            })
+            .style("fill", function (d) {
+                if (d.data.parcel === 'hashtag') {
+                    return color1(d.data.count);
+                } else if (d.data.parcel === 'user_mention') {
+                    return color2(d.data.count);
+                } else {
+                    return color3(d.data.count);
+                }
+            });
 
         node.append("text")
-            .attr("x", function(d) {return d3.select("#" + d.hashtag).attr("cx")})
-            .attr("y", function(d) {return d3.select("#" + d.hashtag).attr("cy")})
-            .attr("text-anchor", "middle")
-            .text(function(d) {return d.hashtag});
+            .attr("dy", ".3em")
+            .style("text-anchor", "middle")
+            .text(function (d) {
+                if (d.data.parcel === 'hashtag'){
+                    return "#" + d.data.text;
+                } else if (d.data.parcel === 'user_mention') {
+                    return "@" + d.data.text;
+                } else {
+                    return d.data.text;
+                }
+            });
 
 
         $('#bubbles').after('<p>lat: ' + coordinates['lat'] + '</p>'

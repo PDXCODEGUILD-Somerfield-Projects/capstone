@@ -120,7 +120,7 @@ def pull_tweet_text(tweets):
     for pair in raked:
         rake_num = compile_text.count(pair[0])
         if rake_num > 1:
-            set_rake_dict = {'phrase': pair[0], 'count': rake_num}
+            set_rake_dict = {'text': pair[0], 'count': rake_num}
             rake_count_dict_list.append(set_rake_dict)
     print(rake_count_dict_list)
     return rake_count_dict_list
@@ -146,11 +146,11 @@ def find_most_common_parcels(tweets, parcel_type):
     parcel_count_list = Counter(all_parcel_list)
     # returns the 10 most common parcels in [('phrase', 3), ('word', 2)] format
     most_common =  parcel_count_list.most_common(10)
-    # create variable for each parcel: hashtags --> hashtag, user_mentions --> user_mention, etc.
+    # # create variable for each parcel: hashtags --> hashtag, user_mentions --> user_mention, etc.
     parcel = str(parcel_type)[:-1]
     # cycle through the most_common list to create a dictionary in {'hashtag': 'phrase', 'count': 2} format
     for pair in most_common:
-        set_dict = {parcel: pair[0], 'count': pair[1]}
+        set_dict = {'parcel': parcel, 'text': pair[0], 'count': pair[1]}
         most_common_dict_list.append(set_dict)
     print(most_common_dict_list)
     return most_common_dict_list

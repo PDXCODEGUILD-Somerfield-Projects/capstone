@@ -45,7 +45,13 @@ def coordinates(request):
     hashtag_list = find_most_common_parcels(tweet_list, 'hashtags')
     user_mention_list = find_most_common_parcels(tweet_list, 'user_mentions')
     urls_list = find_most_common_parcels(tweet_list, 'urls')
+    # combine return lists into one list:
+    twitter_list = raked_list + hashtag_list + user_mention_list
+    print(twitter_list)
     # combine return lists into a json block and send it back to site.js
-    json_return = JsonResponse({'lat': my_lat, 'lng': my_lng, 'phrases': raked_list, 'hashtags': hashtag_list, 'user_mentions': user_mention_list, 'urls': urls_list})
+    json_return = JsonResponse({'lat': my_lat, 'lng': my_lng,
+                                'twitter': twitter_list})
+
+
     return json_return
 
