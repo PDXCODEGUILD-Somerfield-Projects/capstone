@@ -42,7 +42,6 @@ function passLatLong(result) {
         var twitter_data = coordinates.twitter;
         console.log(twitter_data);
 
-
         var diameter = 960;
             // color = d3.scaleOrdinal(d3.schemeCategory20c);
 
@@ -102,8 +101,11 @@ function passLatLong(result) {
             });
 
         node.append("text")
-            .attr("dy", ".3em")
             .style("text-anchor", "middle")
+            .style('font-size', function(d) {
+                return Math.min(d.r - 20, (d.r -50) / this.getComputedTextLength() * 100) + 'px';
+            })
+            .attr("dy", ".35em")
             .text(function (d) {
                 if (d.data.parcel === 'hashtag'){
                     return "#" + d.data.text;

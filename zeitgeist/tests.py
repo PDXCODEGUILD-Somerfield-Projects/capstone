@@ -7,6 +7,9 @@ from django.test import TestCase
 from zeitgeist.twitter_data import deserialized_twitter_data, pull_tweet_text, find_most_common_parcels
 from .domain import Post, Parcel, Hashtag, UserMention, Url, Tweet, format_datetime
 
+from collections import Counter
+from .common_English_words import common_English_words
+
 
 
 class LogicTest(TestCase):
@@ -94,5 +97,17 @@ class LogicTest(TestCase):
         self.assertEqual(test_urls, [('https://t.co/EBqERuI3sF', 1)])
 
 
+def get_most_common_words(tweets):
+    compile_text = ''
+    word_count_dict_list = []
+    for tweet in tweets:
+        compile_text += tweet.clean_text.lower()
+    counted_list = Counter(compile_text.split()).most_common()
+    for pair in counted_list:
+        if pair[0].lower() not in common_English_words and pair[1] > 2:
+            set_dict = {'parcel': 'phrase', 'text': pair[0], 'count': pair[1]}
+            word_count_dict_list.append(set_dict)
+    print(word_count_dict_list)
+    return word_count_dict_list
 
 

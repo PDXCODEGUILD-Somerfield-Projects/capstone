@@ -152,7 +152,6 @@ def find_most_common_parcels(tweets, parcel_type):
     for pair in most_common:
         set_dict = {'parcel': parcel, 'text': pair[0], 'count': pair[1]}
         most_common_dict_list.append(set_dict)
-    print(most_common_dict_list)
     return most_common_dict_list
 
 
