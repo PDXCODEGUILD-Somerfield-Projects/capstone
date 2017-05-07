@@ -7,7 +7,7 @@ import re
 from .common_English_words import common_English_words
 from zeitgeist.domain import format_datetime, Tweet, Hashtag, UserMention, Url
 
-STRIP_STRING = '.,;:!/*()|\'\"[]{}#@'
+STRIP_STRING = '.,;:!/*()|\'\"[]{}#@&'
 
 def deserialized_twitter_data(data):
     '''Takes a Twitter data 'blob' and turns it into a list of Tweet objects
@@ -87,7 +87,6 @@ def deserialized_twitter_data(data):
         if is_retweet == True:
             clean_text = re.sub(r'^RT\s:\s', '', clean_text)
         clean_text = re.sub(r'\sb/c\s', ' because ', clean_text)
-        clean_text = re.sub(r'&amp;', 'and', clean_text)
         clean_text = re.sub(r'\severy1\s', ' everyone ', clean_text)
         clean_text = re.sub(r'\s@\s', ' at ', clean_text)
         clean_text = re.sub(r'\sr\s', ' are ', clean_text)

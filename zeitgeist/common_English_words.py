@@ -1,3 +1,4 @@
+# list of words to exclude from showing up in the phrases
 common_English_words = ('1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
                         'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y',
                         'z', 'the', 'and', 'that', 'it', 'not', 'he', 'as', 'you', 'this', 'but', 'his', 'they',
@@ -16,6 +17,7 @@ common_English_words = ('1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', '
                         'won', 'toward', 'without', 'such', 'again', 'new', 'too', 'http', 'https', 'two', 'did',
                         'lots', 'through', 'though', 'rt', 'gets', 'i\'ve', 'time', 'ever', 'time', 'made', 'via',
                         'there\'s', 'didn\'t', 'he\'s', 'she\'s', 'doing', 'since', 'here', 'there', 'were', 'else',
-                        'i\'d', 'while', 'we\'ll', 'they\'re', 'having')
+                        'i\'d', 'while', 'we\'ll', 'they\'re', 'having', 'amp', 'really', 'says', 'coming', 'done',
+                        'gt', 'lt', 'going', 'both')
 
 

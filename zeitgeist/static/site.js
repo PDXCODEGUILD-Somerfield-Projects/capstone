@@ -112,7 +112,7 @@ function passLatLong(result) {
                 }
             })
             .style('font-size', function(d) {
-                    return Math.min(2 * d.r, (d.r * 2 - 20)/this.getComputedTextLength() * 18) + 'px';
+                    return Math.min(2 * d.r, (d.r * 2 - 20)/this.getComputedTextLength() * 16) + 'px';
             })
             .attr("dy", ".35em");
 
