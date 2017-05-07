@@ -9,7 +9,13 @@ common_English_words = ('1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', '
                         'would\'t', 'don\'t', 'you\'re', 'couldn\'t', 'it\'s', 'isn\'t', 'ours', 'yours', 'hers',
                         'if', 'most', 'i\'m', 'getting', 'that\'s', 'un', 'am', 'should', 'shouldn\'t', 'anything',
                         'cannot', 'i\'ll', 'is', 'are', 'out', 'got', 'lot', 'aren\'t', 'have', 'haven\'t', 'was',
-                        'wasn\'t', 'can', 'go', '-', '--', '!', '.', ',', 'because', 'has', 'does', 'doesn\'t', 'want',
-                        'these', 'goes', 'even', 'every', 'only', 'each', 'each')
+                        'wasn\'t', 'can', 'go', '-', '--', '!', '.', ',', ':', ';', 'because', 'has', 'does',
+                        'doesn\'t', 'want', 'these', 'goes', 'even', 'every', 'only', 'each', 'make', 'day', 'come',
+                        'still', 'more', 'we\'re', 'like', '~', 'him', 'now', 'wanna' 'ain\'t', 'had', 'much', 'off',
+                        'much', 'wants', 'wouldn\'t', 'need', 'needs', 'been', 'being', 'same', 'why', 'im', 'don',
+                        'won', 'toward', 'without', 'such', 'again', 'new', 'too', 'http', 'https', 'two', 'did',
+                        'lots', 'through', 'though', 'rt', 'gets', 'i\'ve', 'time', 'ever', 'time', 'made', 'via',
+                        'there\'s', 'didn\'t', 'he\'s', 'she\'s', 'doing', 'since', 'here', 'there', 'were', 'else',
+                        'i\'d', 'while', 'we\'ll', 'they\'re', 'having')
 
 

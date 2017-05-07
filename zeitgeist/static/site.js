@@ -102,10 +102,6 @@ function passLatLong(result) {
 
         node.append("text")
             .style("text-anchor", "middle")
-            .style('font-size', function(d) {
-                return Math.min(d.r - 20, (d.r -50) / this.getComputedTextLength() * 100) + 'px';
-            })
-            .attr("dy", ".35em")
             .text(function (d) {
                 if (d.data.parcel === 'hashtag'){
                     return "#" + d.data.text;
@@ -114,7 +110,11 @@ function passLatLong(result) {
                 } else {
                     return d.data.text;
                 }
-            });
+            })
+            .style('font-size', function(d) {
+                    return Math.min(2 * d.r, (d.r * 2 - 20)/this.getComputedTextLength() * 18) + 'px';
+            })
+            .attr("dy", ".35em");
 
 
         $('#bubbles').after('<p>lat: ' + coordinates['lat'] + '</p>'

@@ -4,8 +4,10 @@ import RAKE
 
 import re
 
+from .common_English_words import common_English_words
 from zeitgeist.domain import format_datetime, Tweet, Hashtag, UserMention, Url
 
+STRIP_STRING = '.,;:!/*()|\'\"[]{}#@'
 
 def deserialized_twitter_data(data):
     '''Takes a Twitter data 'blob' and turns it into a list of Tweet objects
@@ -126,6 +128,29 @@ def pull_tweet_text(tweets):
     return rake_count_dict_list
 
 
+def get_most_common_words(tweets):
+    compile_list = []
+    word_count_dict_list = []
+    # get the clean text from tweets, change them to lowercase, and make a list of words
+    for tweet in tweets:
+        words_list = (tweet.clean_text.lower()).split()
+        # strip the punctuation from start, end of words
+        for word in words_list:
+            this_word = word.strip(STRIP_STRING)
+            # add words that are not in the common English words list
+            if this_word != '' and this_word not in common_English_words:
+                compile_list.append(this_word)
+    # count each word in the list and return a tupled list with each word and count
+    counted_list = Counter(compile_list).most_common()
+    # cycle through the list of words and create a dictionary
+    # in the {'parcel': 'phrase', 'text': 'word...', 'count': 2} format
+    for pair in counted_list:
+        if pair[1] > 1:
+            set_dict = {'parcel': 'phrase', 'text': pair[0], 'count': pair[1]}
+            word_count_dict_list.append(set_dict)
+    return word_count_dict_list
+
+
 def find_most_common_parcels(tweets, parcel_type):
     '''Finds the 10 most common parcel strings in list of Tweets
 
@@ -148,7 +173,8 @@ def find_most_common_parcels(tweets, parcel_type):
     most_common =  parcel_count_list.most_common(10)
     # # create variable for each parcel: hashtags --> hashtag, user_mentions --> user_mention, etc.
     parcel = str(parcel_type)[:-1]
-    # cycle through the most_common list to create a dictionary in {'hashtag': 'phrase', 'count': 2} format
+    # cycle through the most_common list to create a dictionary
+    # in {'parcel': 'hashtag', 'text': 'some-phrase', 'count': 2} format
     for pair in most_common:
         set_dict = {'parcel': parcel, 'text': pair[0], 'count': pair[1]}
         most_common_dict_list.append(set_dict)
