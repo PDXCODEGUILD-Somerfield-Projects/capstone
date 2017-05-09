@@ -7,7 +7,7 @@ import re
 from .common_English_words import common_English_words
 from zeitgeist.domain import format_datetime, Tweet, Hashtag, UserMention, Url
 
-STRIP_STRING = '.,;:!/*()|\'\"[]{}#@&'
+STRIP_STRING = '.,;:!/*()|\'\"[]{}#@&?'
 
 def deserialized_twitter_data(data):
     '''Takes a Twitter data 'blob' and turns it into a list of Tweet objects
@@ -96,7 +96,6 @@ def deserialized_twitter_data(data):
 
         # create a new tweet object from the deserialized json tweet
         new_tweet = Tweet(user_name, post_time, raw_text, is_retweet, hashtags, user_mentions, urls, clean_text)
-        print(clean_text)
         # add the tweet object to a list of tweet objects
         tweets.append(new_tweet)
     print(tweets)
@@ -123,7 +122,6 @@ def pull_tweet_text(tweets):
         if rake_num > 1:
             set_rake_dict = {'text': pair[0], 'count': rake_num}
             rake_count_dict_list.append(set_rake_dict)
-    print(rake_count_dict_list)
     return rake_count_dict_list
 
 

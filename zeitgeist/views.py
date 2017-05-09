@@ -1,5 +1,6 @@
 import json
 
+from django.contrib.auth import authenticate
 from django.shortcuts import render, redirect
 from json import dumps, loads
 
@@ -53,3 +54,15 @@ def coordinates(request):
 
     return json_return
 
+def login(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(request, username=username, password=password)
+    if user is not None:
+        first_name = user.get_short_name()
+        message = 'login successful'
+        json_return = JsonResponse({'first_name': first_name, 'message': message})
+    else:
+        message = 'invalid login'
+        json_return = JsonResponse({'message': message})
+    return json_return

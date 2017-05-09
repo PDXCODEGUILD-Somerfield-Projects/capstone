@@ -1,3 +1,17 @@
+body {
+    margin:0;
+    padding: 0;
+}
+
+#login {
+    float: right;
+    border: 2px;
+    padding: 10px;
+}
+
+#loggedin {
+    display: none;
+}
 
 .circle text {
     fill: black;

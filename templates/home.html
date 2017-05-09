@@ -7,6 +7,21 @@
     <link rel="stylesheet" href="{% static "site.css" %}">
 </head>
 <body>
+    <div id="login">
+        <form action="/login" method="post" id="loginform">
+            {% csrf_token %}
+            <label for="username">username</label>
+            <input type="text" id="username" name="username">
+            <label for="password">password</label>
+            <input type="password" id="password" name="password">
+            <button type="button" id="loginbutton">Log In</button>
+            {{ login_msg }}
+        </form>
+        <div id="loggedin">
+            <p>Welcome, <span id="firstname"></span>, you are logged in.</p>
+            <button type="button" id="logoutbutton">Log Out</button>
+        </div>
+    </div>
     <button type="button" id="startbutton">Start Locating</button>
     <div id="testdata">
 {#        <svg id="bubbles"></svg>#}
@@ -21,6 +36,7 @@
     <script src="https://d3js.org/d3-quadtree.v1.min.js"></script>
     <script src="https://d3js.org/d3-timer.v1.min.js"></script>
     <script src="https://d3js.org/d3-force.v1.min.js"></script>
+    <script src="{% static 'ajax_csrf_setup.js' %}"></script>
     <script src="{% static "site.js" %}"></script>
 </body>
 </html>

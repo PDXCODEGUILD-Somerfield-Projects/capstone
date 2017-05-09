@@ -5,6 +5,35 @@
 'use strict';
 
 
+function logIn(result) {
+    return new Promise(function(resolve, reject) {
+        var username = $("#username").val();
+        var password = $("#password").val();
+        console.log(username, password);
+        $.post('/login/', {username: username, password: password}, function(result) {
+            resolve(result);
+        });
+    })
+}
+
+function updateUser(result) {
+    var message = result.message;
+    console.log(result);
+    if (message === 'login successful') {
+        var first_name = result.first_name;
+        $("#loginform").hide();
+        // $("#password").hide();
+        // $("#loginbutton").hide();
+        $("#firstname").text(first_name);
+        $("#loggedin").show();
+    } else {
+        $("#username").val("");
+        $("#password").val("");
+        $("#login").append(message);
+    }
+}
+
+
 function getUserLocation(result) {
     return new Promise(function(resolve, reject) {
         navigator.geolocation.getCurrentPosition(function(position) {
@@ -121,6 +150,13 @@ function passLatLong(result) {
             + '<p>' + 'lng: ' + coordinates['lng'] + '</p>');
         });
     }
+
+
+$(document).ready(function() {
+    $("#loginbutton").click(function() {
+       logIn().then(updateUser);
+    })
+});
 
 
 $(document).ready(function() {
