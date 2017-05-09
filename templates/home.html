@@ -15,12 +15,12 @@
             <label for="password">password</label>
             <input type="password" id="password" name="password">
             <button type="button" id="loginbutton">Log In</button>
-            {{ login_msg }}
+            <p id="loginmessage"></p>
         </form>
-        <div id="loggedin">
-            <p>Welcome, <span id="firstname"></span>, you are logged in.</p>
-            <button type="button" id="logoutbutton">Log Out</button>
-        </div>
+    </div>
+    <div id="loggedin">
+        <p>Welcome, <span id="firstname"></span>! You are logged in.
+        <button type="button" id="logoutbutton">Log Out</button></p>
     </div>
     <button type="button" id="startbutton">Start Locating</button>
     <div id="testdata">

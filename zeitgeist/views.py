@@ -1,11 +1,12 @@
 import json
+from datetime import datetime
 
 from django.contrib.auth import authenticate
 from django.shortcuts import render, redirect
 from json import dumps, loads
 
 from zeitgeist.twitter_data import deserialized_twitter_data, get_most_common_words, pull_tweet_text, \
-    find_most_common_parcels
+    find_most_common_parcels, save_search_to_db
 from .oauth import get_oauth_request_token, get_access_token, build_oauth_url, get_twitter_data
 from django.http import JsonResponse
 
@@ -37,6 +38,10 @@ def coordinates(request):
     twitter_token = request.COOKIES['token']
     twitter_response = get_twitter_data(my_lat, my_lng, twitter_token)
 
+    # record datetime of query and get username
+    query_datetime = datetime.now()
+    user_name = request.user
+
     # deserialize the Twitter response json object into tweets
     tweet_list = deserialized_twitter_data(twitter_response.json())
     # get a list of most common phrases/keywords
@@ -47,6 +52,7 @@ def coordinates(request):
     urls_list = find_most_common_parcels(tweet_list, 'urls')
     # combine return lists into one list:
     twitter_list = phrase_list + hashtag_list + user_mention_list
+    save_search_to_db(user_name, twitter_list, query_datetime)
     print(twitter_list)
     # combine return lists into a json block and send it back to site.js
     json_return = JsonResponse({'lat': my_lat, 'lng': my_lng,

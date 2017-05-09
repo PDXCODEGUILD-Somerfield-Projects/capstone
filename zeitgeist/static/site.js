@@ -22,14 +22,15 @@ function updateUser(result) {
     if (message === 'login successful') {
         var first_name = result.first_name;
         $("#loginform").hide();
-        // $("#password").hide();
-        // $("#loginbutton").hide();
+        $("#loginmessage").hide();
         $("#firstname").text(first_name);
         $("#loggedin").show();
     } else {
         $("#username").val("");
         $("#password").val("");
-        $("#login").append(message);
+        if ($("#loginmessage").text() !== 'invalid login') {
+            $("#loginmessage").text(message);
+        }
     }
 }
 

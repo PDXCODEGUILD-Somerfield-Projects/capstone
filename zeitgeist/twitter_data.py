@@ -179,4 +179,6 @@ def find_most_common_parcels(tweets, parcel_type):
 
 
 
+def save_search_to_db(user, twitter_list, query_datetime):
 
+    pass
