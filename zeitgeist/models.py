@@ -4,24 +4,24 @@ from django.contrib.auth.models import User
 
 class SearchQuery(models.Model):
     user = models.ForeignKey(User)
-    timestamp = models.DateTimeField
+    query_timestamp = models.DateTimeField('query time')
     profanity_filter = models.NullBooleanField(default=False)
     adult_filter = models.NullBooleanField(default=False)
 
     def __str__(self):
-        return self.user + ' query at ' + self.timestamp
+        return self.user.username + ' query at ' + str(self.query_timestamp)
 
     def __repr__(self):
         return 'SearchQuery(id={!r}, user={!r}, datetime={!r})'.format(
             self.id,
             self.user,
-            self.timestamp
+            self.query_timestamp
         )
 
 
 
 class Filter(models.Model):
-    word = models.CharField
+    word = models.CharField(max_length=140, default='<empty>')
     search_query = models.ForeignKey(
         SearchQuery,
         on_delete=models.CASCADE
@@ -46,7 +46,7 @@ class SearchResultSet(models.Model):
     user = models.ForeignKey(User)
 
     def __str__(self):
-        return self.user + ' result ' + self.search_query
+        return 'result ' + str(self.search_query)
 
     def __repr__(self):
         return 'SearchResult(id={!r}, search_query={!r}, user={!r})'.format(
@@ -61,29 +61,29 @@ class SearchResultItem(models.Model):
         SearchResultSet,
         on_delete=models.CASCADE
     )
-    text = models.CharField
-    count = models.PositiveSmallIntegerField
+    item_text = models.CharField(max_length=140, default='<empty>')
+    item_count = models.IntegerField(default=0)
 
     def __str__(self):
-        return self.text + ': ' + self.count
+        return self.item_text + ': ' + str(self.item_count)
 
     def __repr__(self):
         return 'SearchResultItem(id={!r}, text={!r}, count={!r})'.format(
             self.id,
-            self.text,
-            self.count
+            self.item_text,
+            self.item_count
         )
 
 
 class ParcelType(models.Model):
-    parcel_type = models.CharField
+    parcel_type = models.CharField(max_length=100, default='phrase')
     search_result_item = models.ForeignKey(
         SearchResultItem,
         on_delete=models.CASCADE
     )
 
     def __str__(self):
-        return self.parcel_type
+        return str(self.parcel_type)
 
     def __repr__(self):
         return 'ParcelType(id={!r}, parcel_type={!r}, search_result_item={!r})'.format(

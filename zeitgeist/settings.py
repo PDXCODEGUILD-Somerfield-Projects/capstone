@@ -12,10 +12,9 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 
-# TWITTER_CONSUMER_KEY = 'word'
-# TWITTER_CONSUMER_SECRET = 'fake'
-TWITTER_CONSUMER_KEY = os.environ['TWITTER_CONSUMER_KEY']
-TWITTER_CONSUMER_SECRET = os.environ['TWITTER_CONSUMER_SECRET']
+
+TWITTER_CONSUMER_KEY = os.environ.get('TWITTER_CONSUMER_KEY')
+TWITTER_CONSUMER_SECRET = os.environ.get('TWITTER_CONSUMER_SECRET')
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

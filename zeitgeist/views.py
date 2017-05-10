@@ -39,7 +39,7 @@ def coordinates(request):
     twitter_response = get_twitter_data(my_lat, my_lng, twitter_token)
 
     # record datetime of query and get username
-    query_datetime = datetime.now()
+    query_datetime = datetime.utcnow()
     user_name = request.user
 
     # deserialize the Twitter response json object into tweets
@@ -52,7 +52,7 @@ def coordinates(request):
     urls_list = find_most_common_parcels(tweet_list, 'urls')
     # combine return lists into one list:
     twitter_list = phrase_list + hashtag_list + user_mention_list
-    save_search_to_db(user_name, twitter_list, query_datetime)
+    save_search_to_db(user_name, twitter_list, query_datetime, p_filter=False, a_filter=False, u_filter=False)
     print(twitter_list)
     # combine return lists into a json block and send it back to site.js
     json_return = JsonResponse({'lat': my_lat, 'lng': my_lng,

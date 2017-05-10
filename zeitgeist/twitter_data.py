@@ -4,6 +4,7 @@ import RAKE
 
 import re
 
+from .models import User, SearchQuery, SearchResultSet, SearchResultItem, Filter, ParcelType
 from .common_English_words import common_English_words
 from zeitgeist.domain import format_datetime, Tweet, Hashtag, UserMention, Url
 
@@ -179,6 +180,27 @@ def find_most_common_parcels(tweets, parcel_type):
 
 
 
-def save_search_to_db(user, twitter_list, query_datetime):
+def save_search_to_db(user, twitter_list, query_datetime, p_filter, a_filter, u_filter):
+    # utc_query_datetime = query_datetime.strftime("%Y-%m-%d %H:%M:%S")
+    query = SearchQuery(user=user, query_timestamp=query_datetime, profanity_filter=False, adult_filter=False)
+    query.save()
+    sq = SearchQuery.objects.get(id=query.id)
+    # for word in u_filter:
+    #     sq.Filter_set.create(word=word)
+    results = sq.searchresultset_set.create(user=user)
+    sr = SearchResultSet.objects.get(id=results.id)
+    for pack in twitter_list:
+        pack_text = pack.get('text')
+        pack_count = pack.get('count')
+        pack_parcel = pack.get('parcel')
+        # item = SearchResultItem(
+        #     search_result = sr,
+        #     item_text=pack_text,
+        #     item_count=pack_count
+        # )
+        item = sr.searchresultitem_set.create(item_text=pack_text, item_count=pack_count)
+        sr_item = SearchResultItem.objects.get(id=item.id)
+        pt = sr_item.parceltype_set.create(parcel_type=pack_parcel)
 
-    pass
+
+
