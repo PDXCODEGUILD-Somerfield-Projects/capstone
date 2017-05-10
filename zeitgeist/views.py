@@ -8,6 +8,7 @@ from json import dumps, loads
 from zeitgeist.twitter_data import deserialized_twitter_data, get_most_common_words, pull_tweet_text, \
     find_most_common_parcels, save_search_to_db
 from .oauth import get_oauth_request_token, get_access_token, build_oauth_url, get_twitter_data
+from .db_query import pull_queries_by_user
 from django.http import JsonResponse
 
 def home(request):
@@ -72,3 +73,9 @@ def login(request):
         message = 'invalid login'
         json_return = JsonResponse({'message': message})
     return json_return
+
+def queries(request):
+    user = request.user
+    user_queries = pull_queries_by_user(user)
+    context = {'user_queries': user_queries}
+    return render(request, 'queries.html', {'user_queries': user_queries})

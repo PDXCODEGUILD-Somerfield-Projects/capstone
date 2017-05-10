@@ -8,7 +8,7 @@
 </head>
 <body>
     <ul id="tabs">
-        <li><a href="{% url 'home' %}" name="menu1">Twitter Search</a></li>
+        <li><a href="{% url 'home' %}">Twitter Search</a></li>
         <li><a href="{% url 'queries' %}" name="menu2">My Query History</a></li>
     </ul>
 
@@ -27,9 +27,16 @@
         <p>Welcome, <span id="firstname"></span>! You are logged in.
         <button type="button" id="logoutbutton">Log Out</button></p>
     </div>
-    <button type="button" id="startbutton">Start Locating</button>
-    <div id="testdata">
-{#        <svg id="bubbles"></svg>#}
+    <div id="querydata">
+        {% if user_queries %}
+        <ul>
+            {% for query in user_queries %}
+            <li><a href=/queries/{{ query.user }}:{{ query.query_timestamp }}"></a></li>
+            {% endfor %}
+        </ul>
+        {% else %}
+            <p>No queries available</p>
+        {% endif %}
     </div>
 
 
