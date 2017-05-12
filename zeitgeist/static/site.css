@@ -14,6 +14,9 @@ body {
 
 #titleheader h1 {
     font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+    font-size: 3em;
+    -webkit-text-stroke-width: 0.5px;
+    -webkit-font-smoothing: antialiased;
     align-self: center;
     padding-left: 5em;
     text-shadow: 1px 3px 2px rgba(0,0,0, 0.3);
@@ -27,12 +30,25 @@ body {
     align-self: flex-end;
 }
 
+#startbutton {
+    border-radius: 10px;
+    border: 1px;
+    box-shadow: 2px 3px 1px grey;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    margin: 2em;
+}
+
 th, td {
     padding: 10px;
 }
 
 th {
     text-align: left;
+}
+
+#loading {
+    text-align: center;
 }
 
 #loginmessage {
