@@ -11,6 +11,14 @@ body {
     font-size: small;
 }
 
+th, td {
+    padding: 10px;
+}
+
+th {
+    text-align: left;
+}
+
 #loginmessage {
     color: red;
 }

@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from . views import home, coordinates, authorization, login, queries
+from . views import home, coordinates, authorization, login, queries, rerun, deletequery
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -23,5 +23,7 @@ urlpatterns = [
     url(r'^login/$', login, name='login'),
     url(r'^coordinates/$', coordinates, name='coordinates'),
     url(r'^authorization/$', authorization, name='authorize'),
-    url(r'^queries/$', queries, name='queries')
+    url(r'^queries/$', queries, name='queries'),
+    url(r'^rerun/$', rerun, name='rerun'),
+    url(r'^deletequery/$', deletequery, name='deletequery')
 ]

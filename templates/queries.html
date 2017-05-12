@@ -29,14 +29,29 @@
     </div>
     <div id="querydata">
         {% if user_queries %}
-        <ul>
-            {% for query in user_queries %}
-            <li><a href=/queries/{{ query.user }}:{{ query.query_timestamp }}"></a></li>
-            {% endfor %}
-        </ul>
+            <table id="querytable">
+            <tr>
+                <th></th>
+                <th><input type="checkbox" id="checkall"></th>
+                <th><input type="button" id="deletequery" value="Delete Selected"></th>
+            </tr>
+            <tr>
+                    <td>{% for query in user_queries %}</td>
+                    <td><input type="checkbox" class="todelete" name="todelete" value="{{ query.id }}"></td>
+                    <td><a href={% url 'queries' %}>{{ query.user }}</a></td>
+                    <td>{{ query.query_timestamp }}</td>
+                    <td>
+                        <input type="submit" class="runbutton" id="run{{ query.id }}" value="run search">
+                    </td>
+            </tr>
+                    <tr>
+                    <td>{% endfor %}</td>
+                    </tr>
+            </table>
         {% else %}
             <p>No queries available</p>
         {% endif %}
+
     </div>
 
 
@@ -51,5 +66,7 @@
     <script src="{% static 'ajax_csrf_setup.js' %}"></script>
     <script src="{% static "site.js" %}"></script>
     <script src="{% static "tab.js" %}"></script>
+    <script src="{% static "query.js" %}"></script>
+    <script src="{% static "bubble.js" %}"></script>
 </body>
 </html>

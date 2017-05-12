@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>home</title>
+    <title>rerun</title>
     <link rel="stylesheet" href="{% static "site.css" %}">
 </head>
 <body>
@@ -12,22 +12,7 @@
         <li><a href="{% url 'queries' %}" name="menu2">My Query History</a></li>
     </ul>
 
-    <div id="login">
-        <form action="{% url "login" %}" method="post" id="loginform">
-            {% csrf_token %}
-            <label for="username">username</label>
-            <input type="text" id="username" name="username">
-            <label for="password">password</label>
-            <input type="password" id="password" name="password">
-            <button type="button" id="loginbutton">Log In</button>
-            <p id="loginmessage"></p>
-        </form>
-    </div>
-    <div id="loggedin">
-        <p>Welcome, <span id="firstname"></span>! You are logged in.
-        <button type="button" id="logoutbutton">Log Out</button></p>
-    </div>
-    <button type="button" id="startbutton">Start Locating</button>
+
     <div id="testdata">
 {#        <svg id="bubbles"></svg>#}
     </div>
@@ -46,5 +31,6 @@
     <script src="{% static "tab.js" %}"></script>
     <script src="{% static "bubble.js" %}"></script>
     <script src="{% static "query.js" %}"></script>
+    <script src="{% static "rerun.js" %}"></script>
 </body>
 </html>

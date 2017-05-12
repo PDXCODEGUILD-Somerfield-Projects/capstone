@@ -7,15 +7,19 @@ class SearchQuery(models.Model):
     query_timestamp = models.DateTimeField('query time')
     profanity_filter = models.NullBooleanField(default=False)
     adult_filter = models.NullBooleanField(default=False)
+    latitude = models.FloatField(null=True, blank=True, default=None)
+    longitude = models.FloatField(null=True, blank=True, default=None)
 
     def __str__(self):
         return self.user.username + ' query at ' + str(self.query_timestamp)
 
     def __repr__(self):
-        return 'SearchQuery(id={!r}, user={!r}, datetime={!r})'.format(
+        return 'SearchQuery(id={!r}, user={!r}, datetime={!r}), lat={!r}, lng={!r}'.format(
             self.id,
             self.user,
-            self.query_timestamp
+            self.query_timestamp,
+            self.latitude,
+            self.longitude
         )
 
 

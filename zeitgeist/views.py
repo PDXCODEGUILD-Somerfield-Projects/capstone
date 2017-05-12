@@ -8,7 +8,7 @@ from json import dumps, loads
 from zeitgeist.twitter_data import deserialized_twitter_data, get_most_common_words, pull_tweet_text, \
     find_most_common_parcels, save_search_to_db
 from .oauth import get_oauth_request_token, get_access_token, build_oauth_url, get_twitter_data
-from .db_query import pull_queries_by_user
+from .db_query import pull_queries_by_user, rebuild_query_by_id, delete_selected_queries
 from django.http import JsonResponse
 
 def home(request):
@@ -53,7 +53,8 @@ def coordinates(request):
     urls_list = find_most_common_parcels(tweet_list, 'urls')
     # combine return lists into one list:
     twitter_list = phrase_list + hashtag_list + user_mention_list
-    save_search_to_db(user_name, twitter_list, query_datetime, p_filter=False, a_filter=False, u_filter=False)
+    save_search_to_db(user_name, twitter_list, query_datetime, p_filter=False, a_filter=False, u_filter=False,
+                      lat=my_lat, lng=my_lng)
     print(twitter_list)
     # combine return lists into a json block and send it back to site.js
     json_return = JsonResponse({'lat': my_lat, 'lng': my_lng,
@@ -78,4 +79,17 @@ def queries(request):
     user = request.user
     user_queries = pull_queries_by_user(user)
     context = {'user_queries': user_queries}
-    return render(request, 'queries.html', {'user_queries': user_queries})
+    return render(request, 'queries.html', context)
+
+def rerun(request):
+    search_id = request.GET.get('hiddeninput')
+    query_dict = rebuild_query_by_id(search_id)
+    json_return = JsonResponse(query_dict)
+    return json_return
+
+def deletequery(request):
+    id_array = request.POST.getlist('checks[]')
+    delete_selected_queries(id_array)
+    message = 'success'
+    return JsonResponse({'message': message})
+

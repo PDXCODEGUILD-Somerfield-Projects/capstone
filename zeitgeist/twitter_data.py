@@ -180,7 +180,7 @@ def find_most_common_parcels(tweets, parcel_type):
 
 
 
-def save_search_to_db(user, twitter_list, query_datetime, p_filter, a_filter, u_filter):
+def save_search_to_db(user, twitter_list, query_datetime, p_filter, a_filter, u_filter, lat, lng):
     '''Saves user searches to db
 
     :param user:
@@ -192,7 +192,8 @@ def save_search_to_db(user, twitter_list, query_datetime, p_filter, a_filter, u_
     :return: query objects: SearchQuery, SearchResultSet to the database
     '''
     # save the query to the db and get the query object
-    query = SearchQuery(user=user, query_timestamp=query_datetime, profanity_filter=False, adult_filter=False)
+    query = SearchQuery(user=user, query_timestamp=query_datetime, profanity_filter=False, adult_filter=False,
+                        latitude=lat, longitude=lng)
     query.save()
     sq = SearchQuery.objects.get(id=query.id)
     # for word in u_filter:
