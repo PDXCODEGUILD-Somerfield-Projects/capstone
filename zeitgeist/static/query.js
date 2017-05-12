@@ -4,6 +4,16 @@
 
 
 $(document).ready(function() {
+    $('.timestamp').each(function(index, item) {
+        var query_date = Date.parse($(item).text().replace('.', '')+ ' UTC');
+        var new_date = new Date(query_date);
+        $(item).text(new_date);
+    });
+
+});
+
+
+$(document).ready(function() {
     $("#deletequery").click(function(event) {
         var checkValues = $('.todelete:checked').map(function() {
             return this.value;
@@ -25,6 +35,7 @@ $(document).ready(function() {
     })
 });
 
+
 $(document).ready(function() {
     $('.runbutton').click(function(event) {
         var buttonId = (event.target.id).replace('run', '');
@@ -40,12 +51,14 @@ $(document).ready(function() {
     })
 });
 
+
 $(document).ready(function() {
     $('#close').click(function() {
         $('#testdata').hide();
         $('#querydata').show();
     })
 });
+
 
 $('#checkall').change(function() {
     $("input:checkbox").prop('checked', $(this).prop('checked'));
