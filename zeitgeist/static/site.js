@@ -67,6 +67,7 @@ $(document).ready(function() {
 
 $(document).ready(function() {
     $("#startbutton").click(function() {
+        $('#loading').show();
         getUserLocation().then(passLatLong);
     })
 });

@@ -8,8 +8,10 @@ function passLatLong(result) {
     var longitude = result[1];
     $.get('/coordinates/', {lat: latitude, lng: longitude}, function(coordinates) {
         makeBubbles(coordinates);
-
-        });
+        })
+        .always(function() {
+            $('#loading').hide();
+    });
     }
 
 function makeBubbles(dataReturn) {
