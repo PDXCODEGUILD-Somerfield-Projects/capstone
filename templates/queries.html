@@ -44,7 +44,7 @@
                     <td><a href={% url 'queries' %}>{{ query.user }}</a></td>
                     <td class="timestamp" id="time{{ query.id }}">{{ query.query_timestamp }}</td>
                     <td>
-                        <input type="submit" class="runbutton" id="run{{ query.id }}" value="run search">
+                        <input type="button" class="runbutton" id="run{{ query.id }}" value="run search">
                     </td>
             </tr>
                     <tr>
@@ -55,7 +55,7 @@
             <p>No queries available</p>
         {% endif %}
     </div>
-    <div><span id="close">close</span></div>
+    <div class="message"><span id="close">close</span></div>
     <div class="queries" id="testdata">
 
     </div>

@@ -25,10 +25,12 @@
             <button type="button" id="logoutbutton">Log Out</button></p>
         </div>
     </div>
-    <ul id="tabs">
-        <li><a href="{% url 'home' %}" name="menu1">Twitter Search</a></li>
-        <li><a href="{% url 'queries' %}" name="menu2">My Query History</a></li>
-    </ul>
+    <div class="tabs">
+        <ul id="tabs">
+            <li><a href="{% url 'home' %}" name="menu1">Twitter Search</a></li>
+            <li><a href="{% url 'queries' %}" name="menu2">My Query History</a></li>
+        </ul>
+    </div>
     <button type="button" id="startbutton">Start Locating</button>
     <div id="loading">one moment please...</div>
     <div id="testdata">
