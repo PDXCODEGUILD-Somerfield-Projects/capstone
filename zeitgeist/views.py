@@ -82,7 +82,7 @@ def queries(request):
     return render(request, 'queries.html', context)
 
 def rerun(request):
-    search_id = request.GET.get('hiddeninput')
+    search_id = request.GET.get('id')
     query_dict = rebuild_query_by_id(search_id)
     json_return = JsonResponse(query_dict)
     return json_return

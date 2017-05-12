@@ -25,6 +25,28 @@ $(document).ready(function() {
     })
 });
 
+$(document).ready(function() {
+    $('.runbutton').click(function(event) {
+        var buttonId = (event.target.id).replace('run', '');
+        $.get('/rerun/', {'id': buttonId})
+            .done(function(response) {
+                $('#querydata').hide();
+                $('#testdata').show();
+                makeBubbles(response);
+            })
+            .fail(function() {
+                $('#querydata').text('There was a problem running this query...');
+            });
+    })
+});
+
+$(document).ready(function() {
+    $('#close').click(function() {
+        $('#testdata').hide();
+        $('#querydata').show();
+    })
+});
+
 $('#checkall').change(function() {
     $("input:checkbox").prop('checked', $(this).prop('checked'));
 });

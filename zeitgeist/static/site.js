@@ -71,10 +71,10 @@ $(document).ready(function() {
     })
 });
 
-$(document).ready(function() {
-    $(".runbutton").click(function(event) {
-        var buttonId = event.target.id;
-        console.log(buttonId);
-       rerunSelectedQuery(buttonId).then(makeBubbles);
-    })
-});
+// $(document).ready(function() {
+//     $(".runbutton").click(function(event) {
+//         var buttonId = event.target.id;
+//         console.log(buttonId);
+//        rerunSelectedQuery(buttonId).then(makeBubbles);
+//     })
+// });

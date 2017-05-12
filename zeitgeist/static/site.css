@@ -31,6 +31,10 @@ th {
     font-size: small;
 }
 
+.queries #testdata {
+    display: none;
+}
+
 .circle text {
     fill: black;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
