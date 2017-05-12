@@ -43,6 +43,7 @@ $(document).ready(function() {
             .done(function(response) {
                 $('#querydata').hide();
                 $('#testdata').show();
+                $('#close').show();
                 makeBubbles(response);
             })
             .fail(function() {
@@ -55,6 +56,7 @@ $(document).ready(function() {
 $(document).ready(function() {
     $('#close').click(function() {
         $('#testdata').hide();
+        $('#close').hide();
         $('#querydata').show();
     })
 });

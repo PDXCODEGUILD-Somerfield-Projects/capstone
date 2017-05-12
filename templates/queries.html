@@ -7,26 +7,29 @@
     <link rel="stylesheet" href="{% static "site.css" %}">
 </head>
 <body>
+    <div id="titleheader">
+        <h1>genius loci</h1>
+        <div id="login">
+            <form action="{% url "login" %}" method="post" id="loginform">
+                {% csrf_token %}
+                <label for="username">username</label>
+                <input type="text" id="username" name="username">
+                <label for="password">password</label>
+                <input type="password" id="password" name="password">
+                <button type="button" id="loginbutton">Log In</button>
+                <p id="loginmessage"></p>
+            </form>
+        </div>
+        <div id="loggedin">
+            <p>Welcome, <span id="firstname"></span>! You are logged in.
+            <button type="button" id="logoutbutton">Log Out</button></p>
+        </div>
+    </div>
     <ul id="tabs">
         <li><a href="{% url 'home' %}">Twitter Search</a></li>
         <li><a href="{% url 'queries' %}" name="menu2">My Query History</a></li>
     </ul>
 
-    <div id="login">
-        <form action="/login" method="post" id="loginform">
-            {% csrf_token %}
-            <label for="username">username</label>
-            <input type="text" id="username" name="username">
-            <label for="password">password</label>
-            <input type="password" id="password" name="password">
-            <button type="button" id="loginbutton">Log In</button>
-            <p id="loginmessage"></p>
-        </form>
-    </div>
-    <div id="loggedin">
-        <p>Welcome, <span id="firstname"></span>! You are logged in.
-        <button type="button" id="logoutbutton">Log Out</button></p>
-    </div>
     <div id="querydata">
         {% if user_queries %}
             <table id="querytable">
@@ -52,8 +55,9 @@
             <p>No queries available</p>
         {% endif %}
     </div>
+    <div><span id="close">close</span></div>
     <div class="queries" id="testdata">
-        <span id="close">close</span>
+
     </div>
 
 

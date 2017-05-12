@@ -7,26 +7,28 @@
     <link rel="stylesheet" href="{% static "site.css" %}">
 </head>
 <body>
+    <div id="titleheader">
+        <h1>genius loci</h1>
+        <div id="login">
+            <form action="{% url "login" %}" method="post" id="loginform">
+                {% csrf_token %}
+                <label for="username">username</label>
+                <input type="text" id="username" name="username">
+                <label for="password">password</label>
+                <input type="password" id="password" name="password">
+                <button type="button" id="loginbutton">Log In</button>
+                <p id="loginmessage"></p>
+            </form>
+        </div>
+        <div id="loggedin">
+            <p>Welcome, <span id="firstname"></span>! You are logged in.
+            <button type="button" id="logoutbutton">Log Out</button></p>
+        </div>
+    </div>
     <ul id="tabs">
         <li><a href="{% url 'home' %}" name="menu1">Twitter Search</a></li>
         <li><a href="{% url 'queries' %}" name="menu2">My Query History</a></li>
     </ul>
-
-    <div id="login">
-        <form action="{% url "login" %}" method="post" id="loginform">
-            {% csrf_token %}
-            <label for="username">username</label>
-            <input type="text" id="username" name="username">
-            <label for="password">password</label>
-            <input type="password" id="password" name="password">
-            <button type="button" id="loginbutton">Log In</button>
-            <p id="loginmessage"></p>
-        </form>
-    </div>
-    <div id="loggedin">
-        <p>Welcome, <span id="firstname"></span>! You are logged in.
-        <button type="button" id="logoutbutton">Log Out</button></p>
-    </div>
     <button type="button" id="startbutton">Start Locating</button>
     <div id="loading">one moment please...</div>
     <div id="testdata">
