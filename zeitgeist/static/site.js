@@ -16,6 +16,7 @@ function logIn(result) {
     })
 }
 
+
 function updateUser(result) {
     var message = result.message;
     console.log(result);
@@ -54,10 +55,6 @@ function getUserLocation(result) {
 }
 
 
-
-
-
-
 $(document).ready(function() {
     $("#loginbutton").click(function() {
        logIn().then(updateUser);
@@ -67,6 +64,7 @@ $(document).ready(function() {
 
 $(document).ready(function() {
     $("#startbutton").click(function() {
+        $('#testdata').empty();
         $('#loading').show();
         getUserLocation().then(passLatLong);
     })

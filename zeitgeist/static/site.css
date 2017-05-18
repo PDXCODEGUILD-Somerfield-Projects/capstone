@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin:0;
     padding: 0;
@@ -10,7 +14,6 @@ body {
     display: flex;
     justify-content: space-between;
     height: 6em;
-
 }
 
 #titleheader h1 {
@@ -33,6 +36,7 @@ body {
     font-size: small;
     align-self: flex-end;
 }
+
 
 #startbutton {
     border-radius: 10px;
@@ -77,10 +81,6 @@ th {
 
 tr {
     padding-bottom: 1em;
-}
-
-#loading {
-    text-align: center;
 }
 
 #loginmessage {
@@ -136,6 +136,7 @@ li a:hover {
 
 #loading {
     display: none;
+    text-align: center;
 }
 
 #close {
