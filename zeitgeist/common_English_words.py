@@ -18,6 +18,6 @@ common_English_words = ('1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', '
                         'lots', 'through', 'though', 'rt', 'gets', 'i\'ve', 'time', 'ever', 'time', 'made', 'via',
                         'there\'s', 'didn\'t', 'he\'s', 'she\'s', 'doing', 'since', 'here', 'there', 'were', 'else',
                         'i\'d', 'while', 'we\'ll', 'they\'re', 'having', 'amp', 'really', 'says', 'coming', 'done',
-                        'gt', 'lt', 'going', 'both', 'what\'s', 'makes')
+                        'gt', 'lt', 'going', 'both', 'what\'s', 'makes', 'here\'s,' 'let\'s', 'i\'ll', 'you\'ll')
 
 

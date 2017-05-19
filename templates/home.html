@@ -4,40 +4,55 @@
 <head>
     <meta charset="UTF-8" name="viewport" content="width=device-width", initial-scale="1.0">
     <title>home</title>
+    <!-- bootstrap Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="{% static "site.css" %}">
 </head>
 <body>
-    <div id="titleheader">
-        <h1>genius loci</h1>
-        <div id="login">
-            <form action="{% url "login" %}" method="post" id="loginform">
+    <div class="container-fluid row" id="titleheader">
+        <div class="col-md-5">
+            <h1>genius loci</h1>
+        </div>
+
+        <div class="col-md-5 col-md-offset-2" id="login">
+            <form action="{% url "login" %}" method="post" class="form-inline" id="loginform">
                 {% csrf_token %}
-                <label for="username">username</label>
-                <input type="text" id="username" name="username">
-                <label for="password">password</label>
-                <input type="password" id="password" name="password">
+                <div class="form-group">
+                    <label class="sr-only" for="username">username</label>
+                    <input type="text" class="form-control" id="username" name="username" placeholder="username">
+                </div>
+                <div class="form-group">
+                    <label class="sr-only" for="password">password</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="password">
+                </div>
                 <button type="button" id="loginbutton">Log In</button>
                 <p id="loginmessage"></p>
             </form>
         </div>
-        <div id="loggedin">
+        <div class="col-md-5 col-md-offset-2" id="loggedin">
             <p>Welcome, <span id="firstname"></span>! You are logged in.
             <button type="button" id="logoutbutton">Log Out</button></p>
         </div>
     </div>
-    <div class="tabs">
-        <ul id="tabs">
-            <li><a href="{% url 'home' %}" name="menu1">Twitter Search</a></li>
-            <li><a href="{% url 'queries' %}" name="menu2">My Query History</a></li>
-        </ul>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <ul class="nav navbar-nav">
+                <li><a href="{% url 'home' %}" name="menu1">Twitter Search</a></li>
+                <li><a href="{% url 'queries' %}" name="menu2">My Query History</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container col-md-2">
+        <button type="button" id="startbutton">Start Locating</button>
     </div>
-    <button type="button" id="startbutton">Start Locating</button>
-    <div id="loading">one moment please...</div>
-    <div id="testdata">
-{#        <svg id="bubbles"></svg>#}
-    </div>
+    <div class="col-md-6" id="loading">one moment please...</div>
+    <div id="testdata"></div>
 
 
+     <!--bootstrap jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!--bootstrap Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <script src="https://code.jquery.com/jquery-2.2.3.js"></script>
      <script src="https://d3js.org/d3.v4.min.js"></script>

@@ -2,12 +2,28 @@
  * Created by sydneysomerfield on 5/11/17.
  */
 
+function pad(n, width) {
+  n = n + '';
+  if (n.length >= width) {
+      return n;
+  } else {
+      return new Array(width - n.length + 1).join(0) + n;
+  }
+}
 
 $(document).ready(function() {
     $('.timestamp').each(function(index, item) {
-        var query_date = Date.parse($(item).text().replace('.', '')+ ' UTC');
-        var new_date = new Date(query_date);
-        $(item).text(new_date);
+        var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+        'August', 'September', 'October', 'November', 'December'];
+        var queryDate = Date.parse($(item).text().replace('.', '')+ ' UTC');
+        var newDate = new Date(queryDate);
+        var m = newDate.getMonth();
+        var d = pad(newDate.getDate(), 2);
+        var y = newDate.getFullYear();
+        var h = pad(newDate.getHours(), 2);
+        var min = pad(newDate.getMinutes(), 2);
+        var s = pad(newDate.getSeconds(), 2);
+        $(item).text(monthNames[m] + ' ' + d + ', ' + y + ', ' + h + ':' + min + ':' + s);
     });
 
 });
