@@ -55,11 +55,9 @@ def coordinates(request):
     twitter_list = phrase_list + hashtag_list + user_mention_list
     save_search_to_db(user_name, twitter_list, query_datetime, p_filter=False, a_filter=False, u_filter=False,
                       lat=my_lat, lng=my_lng)
-    print(twitter_list)
     # combine return lists into a json block and send it back to site.js
     json_return = JsonResponse({'lat': my_lat, 'lng': my_lng,
                                 'twitter': twitter_list})
-
     return json_return
 
 def login(request):

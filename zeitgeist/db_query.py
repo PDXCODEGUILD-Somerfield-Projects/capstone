@@ -2,7 +2,6 @@ from .models import User, SearchQuery, SearchResultSet, SearchResultItem, Filter
 
 def pull_queries_by_user(user):
     user_queries = SearchQuery.objects.filter(searchresultset__user=user)
-    print(user_queries)
     return user_queries
 
 def rebuild_query_by_id(search_id):
@@ -15,7 +14,6 @@ def rebuild_query_by_id(search_id):
         dict_item = {'parcel': parcel, 'text': item.item_text, 'count': item.item_count}
         query_list.append(dict_item)
     query_dict = {'lat': lat, 'lng': lng, 'twitter': query_list}
-    print(query_dict)
     return query_dict
 
 def delete_selected_queries(id_array):

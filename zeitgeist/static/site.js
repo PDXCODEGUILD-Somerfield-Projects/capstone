@@ -9,7 +9,7 @@ function logIn(result) {
     return new Promise(function(resolve, reject) {
         var username = $("#username").val();
         var password = $("#password").val();
-        console.log(username, password);
+        //console.log(username, password);
         $.post('/login/', {username: username, password: password}, function(result) {
             resolve(result);
         });
@@ -19,7 +19,7 @@ function logIn(result) {
 
 function updateUser(result) {
     var message = result.message;
-    console.log(result);
+    //console.log(result);
     if (message === 'login successful') {
         var first_name = result.first_name;
         $("#loginform").hide();
@@ -70,10 +70,3 @@ $(document).ready(function() {
     })
 });
 
-// $(document).ready(function() {
-//     $(".runbutton").click(function(event) {
-//         var buttonId = event.target.id;
-//         console.log(buttonId);
-//        rerunSelectedQuery(buttonId).then(makeBubbles);
-//     })
-// });

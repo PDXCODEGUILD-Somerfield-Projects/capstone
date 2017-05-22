@@ -3,7 +3,7 @@
  */
 
 function passLatLong(result) {
-    console.log(result);
+    //console.log(result);
     var latitude = result[0];
     var longitude = result[1];
     $.get('/coordinates/', {lat: latitude, lng: longitude}, function(coordinates) {
@@ -15,9 +15,9 @@ function passLatLong(result) {
     }
 
 function makeBubbles(dataReturn) {
-    console.log(dataReturn);
+    //console.log(dataReturn);
         var twitter_data = dataReturn.twitter;
-        console.log(twitter_data);
+        //console.log(twitter_data);
 
         var diameter = 960;
             // color = d3.scaleOrdinal(d3.schemeCategory20c);

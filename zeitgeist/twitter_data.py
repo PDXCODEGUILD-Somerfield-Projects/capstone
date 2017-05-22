@@ -99,11 +99,10 @@ def deserialized_twitter_data(data):
         new_tweet = Tweet(user_name, post_time, raw_text, is_retweet, hashtags, user_mentions, urls, clean_text)
         # add the tweet object to a list of tweet objects
         tweets.append(new_tweet)
-    print(tweets)
 
     return tweets
 
-
+# This function is not currently used
 def pull_tweet_text(tweets):
     '''Uses python-rake to create a list of key words and phrases with ranking
 

@@ -56,7 +56,7 @@
             <tr>
                     <td>{% for query in user_queries %}</td>
                     <td><input type="checkbox" class="todelete" name="todelete" value="{{ query.id }}"></td>
-                    <td><a href={% url 'queries' %}>{{ query.user }}</a></td>
+                    <td class="queried-user">{{ query.user }}</td>
                     <td class="timestamp" id="time{{ query.id }}">{{ query.query_timestamp }}</td>
                     <td>
                         <input type="button" class="runbutton" id="run{{ query.id }}" value="run search">

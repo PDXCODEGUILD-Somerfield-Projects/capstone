@@ -2,6 +2,8 @@
  * Created by sydneysomerfield on 5/11/17.
  */
 
+
+//creates zero padding for date format
 function pad(n, width) {
   n = n + '';
   if (n.length >= width) {
@@ -11,6 +13,7 @@ function pad(n, width) {
   }
 }
 
+//formats datetime string to the browser timezone
 $(document).ready(function() {
     $('.timestamp').each(function(index, item) {
         var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
@@ -25,7 +28,6 @@ $(document).ready(function() {
         var s = pad(newDate.getSeconds(), 2);
         $(item).text(monthNames[m] + ' ' + d + ', ' + y + ', ' + h + ':' + min + ':' + s);
     });
-
 });
 
 
