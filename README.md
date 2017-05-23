@@ -24,6 +24,8 @@ Users may also delete queries they no longer wish to keep.
 Please note that while the app filters out the most common English words (such as 'the', 'and', 'a'), it does not filter words that some
 users may consider profane.
 
+![Alt text](https://cloud.githubusercontent.com/assets/25858061/26338237/4a3a6c18-3f33-11e7-9a0a-f7ccdbbd4a03.jpg "Bubble Chart")
+
 ## Setup
 Requirements: 
 Registered Twitter app (needed to set up the redirect url and to get a Twitter Consumer Key and Secret, 
