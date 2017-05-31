@@ -2,23 +2,24 @@ import json
 from datetime import datetime
 
 from django.contrib.auth import authenticate
+
 from django.shortcuts import render, redirect
-from json import dumps, loads
+from json import loads
 
 from zeitgeist.twitter_data import deserialized_twitter_data, get_most_common_words, pull_tweet_text, \
     find_most_common_parcels, save_search_to_db
-from .oauth import get_oauth_request_token, get_access_token, build_oauth_url, get_twitter_data
+from .oauth import get_oauth_request_token, get_access_token, build_oauth_url, get_twitter_data, TwitterOauthMiddleware
 from .db_query import pull_queries_by_user, rebuild_query_by_id, delete_selected_queries
 from django.http import JsonResponse
 
-def home(request):
-    return render(request, 'home.html')
+
 
 
 def home(request):
     if 'token' in request.COOKIES:
         token = loads(request.COOKIES['token'])
-        return render(request, 'home.html')
+        twitter_name = token['screen_name']
+        return render(request, 'home.html', {'username': twitter_name})
     else:
         print('no token')
         return get_oauth_request_token(
@@ -73,6 +74,13 @@ def login(request):
         json_return = JsonResponse({'message': message})
     return json_return
 
+
+
+
+from django.utils.decorators import decorator_from_middleware
+
+
+@decorator_from_middleware(TwitterOauthMiddleware)
 def queries(request):
     user = request.user
     user_queries = pull_queries_by_user(user)

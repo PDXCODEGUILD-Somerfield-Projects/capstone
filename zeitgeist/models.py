@@ -1,6 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+class UserProfile(models.Model):
+    user= models.OneToOneField(User)
+    twitter_id = models.CharField(max_length=140, default='<empty>')
+
+    def __str__(self):
+        return self.user.username + ' twitter_id:' + self.twitter_id
+
+    def __repr__(self):
+        return self.twitter_id
+
 
 class SearchQuery(models.Model):
     user = models.ForeignKey(User)
