@@ -1,5 +1,9 @@
+from django.contrib.auth.models import User
 from django.utils.decorators import make_middleware_decorator
 from requests_oauthlib import OAuth1Session
+
+from zeitgeist.db_query import pull_queries_by_user
+from zeitgeist.models import UserProfile
 from .settings import TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET
 from json import loads
 
@@ -10,12 +14,30 @@ TWITTER_ACCESS_TOKEN_URL = 'https://api.twitter.com/oauth/access_token'
 TWITTER_VERIFY_CRED_URL = 'https://api.twitter.com/1.1/account/verify_credentials.json'
 
 
-class TwitterOauthMiddleware(object):
+def authenticate_user(response):
+    # link to user if user_id exists
+    user_id = response.json()['id']
+    my_user = UserProfile.objects.filter(twitter_id=user_id)
+    if len(my_user) != 0:
+        auth_user = User.objects.get(userprofile__twitter_id=user_id)
+        user_first_last = UserProfile.objects.get(user=auth_user).twitter_name
+        print(user_first_last)
+    else:
+        # if user is not in db, create a new user from twitter credentials
+        user_name = response.json()['screen_name']
+        user_first_last = response.json()['name']
+        new_user = User.objects.create_user(username=user_name)
+        new_user_profile = UserProfile(
+            user=new_user,
+            twitter_id=user_id,
+            twitter_name=user_first_last
+        ).save()
+        print(user_first_last)
+    # return user_first_last
 
-    # def __init__(self, get_response):
-    #     print("init")
-    #     self.get_response = get_response
-    # #     # One-time configuration and initialization.
+
+
+class TwitterOauthMiddleware(object):
 
     def process_request(self, request):
         print("process request")
@@ -29,13 +51,12 @@ class TwitterOauthMiddleware(object):
             resource_owner_key=access_token_dict['oauth_token'],
             resource_owner_secret=access_token_dict['oauth_token_secret'])
         response = oauth.get(TWITTER_VERIFY_CRED_URL)
+        if response.status_code == 200:
+            authenticate_user(response)
 
-
-        print(response)
-
-        # Code to be executed for each request/response after
-        # the view is called.
-
+        print(response.status_code)
+        # print(response.json())
+        # GRAB RESPONSE AND DO SOMETHING WITH IT
         return None
 
 def get_oauth_request_token(callback, error):
