@@ -1,4 +1,7 @@
-from .models import User, SearchQuery, SearchResultSet, SearchResultItem, Filter, ParcelType
+from json import loads
+
+from .models import User, SearchQuery, SearchResultSet, SearchResultItem, Filter, ParcelType, UserProfile
+
 
 def pull_queries_by_user(user):
     user_queries = SearchQuery.objects.filter(searchresultset__user=user)
@@ -19,3 +22,12 @@ def rebuild_query_by_id(search_id):
 def delete_selected_queries(id_array):
     sq = SearchQuery.objects.filter(pk__in=id_array)
     sq.delete()
+
+def get_current_user_name(request):
+    if 'token' in request.COOKIES:
+        token = loads(request.COOKIES['token'])
+        twitter_id = token['user_id']
+        this_user_name = UserProfile.objects.get(twitter_id=twitter_id).twitter_name
+        return this_user_name
+    else:
+        print('no token')

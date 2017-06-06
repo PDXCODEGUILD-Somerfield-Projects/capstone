@@ -2,30 +2,23 @@ import json
 from datetime import datetime
 
 from django.http import HttpResponse
-from django.contrib.auth import authenticate, logout
 
 from django.shortcuts import render, redirect
-from json import loads
 
 from zeitgeist.twitter_data import deserialized_twitter_data, get_most_common_words, pull_tweet_text, \
     find_most_common_parcels, save_search_to_db
 from .oauth import get_oauth_request_token, get_access_token, build_oauth_url, get_twitter_data, TwitterOauthMiddleware
-from .db_query import pull_queries_by_user, rebuild_query_by_id, delete_selected_queries
+from .db_query import pull_queries_by_user, rebuild_query_by_id, delete_selected_queries, get_current_user_name
 from django.http import JsonResponse
 
+from django.utils.decorators import decorator_from_middleware
 
 
-
+@decorator_from_middleware(TwitterOauthMiddleware)
 def home(request):
-    if 'token' in request.COOKIES:
-        token = loads(request.COOKIES['token'])
-        twitter_name = token['screen_name']
-        return render(request, 'home.html', {'username': twitter_name})
-    else:
-        print('no token')
-        return get_oauth_request_token(
-            lambda key, secret: redirect(build_oauth_url(key, secret)),
-            lambda message: render(request, 'error.html', {'error': message}))
+    # get user name:
+    twitter_name = get_current_user_name(request)
+    return render(request, 'home.html', {'username': twitter_name})
 
 
 def authorization(request):
@@ -69,22 +62,25 @@ def logout_user(request):
     return response
 
 
-from django.utils.decorators import decorator_from_middleware
-
 
 @decorator_from_middleware(TwitterOauthMiddleware)
 def queries(request):
     user = request.user
     user_queries = pull_queries_by_user(user)
-    context = {'user_queries': user_queries}
+    twitter_user = get_current_user_name(request)
+    context = {'user_queries': user_queries, 'username': twitter_user}
     return render(request, 'queries.html', context)
 
+
+@decorator_from_middleware(TwitterOauthMiddleware)
 def rerun(request):
     search_id = request.GET.get('id')
     query_dict = rebuild_query_by_id(search_id)
     json_return = JsonResponse(query_dict)
     return json_return
 
+
+@decorator_from_middleware(TwitterOauthMiddleware)
 def deletequery(request):
     id_array = request.POST.getlist('checks[]')
     delete_selected_queries(id_array)

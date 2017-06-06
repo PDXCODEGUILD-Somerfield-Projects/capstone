@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.utils.decorators import make_middleware_decorator
 from requests_oauthlib import OAuth1Session
 
@@ -42,6 +42,18 @@ def authenticate_user(request, response):
     return user_first_last
 
 
+def verify_Twitter_credentials(request, twitter_token):
+    # decode the user cookie token
+    access_token_dict = loads(twitter_token)
+    # send verification request to Twitter
+    oauth = OAuth1Session(
+        client_key=TWITTER_CONSUMER_KEY,
+        client_secret=TWITTER_CONSUMER_SECRET,
+        resource_owner_key=access_token_dict['oauth_token'],
+        resource_owner_secret=access_token_dict['oauth_token_secret'])
+    response = oauth.get(TWITTER_VERIFY_CRED_URL)
+    return response
+
 
 class TwitterOauthMiddleware(object):
 
@@ -50,27 +62,28 @@ class TwitterOauthMiddleware(object):
         # Code to be executed for each request before
         # the view (and later middleware) are called.
 
-        # Verify the user's credentials through Twitter
-        twitter_token = request.COOKIES['token']
-        access_token_dict = loads(twitter_token)
-        oauth = OAuth1Session(
-            client_key=TWITTER_CONSUMER_KEY,
-            client_secret=TWITTER_CONSUMER_SECRET,
-            resource_owner_key=access_token_dict['oauth_token'],
-            resource_owner_secret=access_token_dict['oauth_token_secret'])
-        response = oauth.get(TWITTER_VERIFY_CRED_URL)
+        try:
+            twitter_token = request.COOKIES['token']
 
-        # If Twitter bounces back a 200 status code, authenticate the user
-        # and return a success message
-        if response.status_code == 200:
-            auth_user_name = authenticate_user(request, response)
-            return None
-        # If 200 status code is not bounced back, return a failure message
-        else:
-            status_reason = response.reason
-            message = 'Authentication failure reason:' + status_reason + '. ' \
-                         + 'Please authorize through Twitter to log in.'
-            return render(request, 'error.html', {'error': message})
+            # Verify the user's credentials through Twitter
+            response = verify_Twitter_credentials(request, twitter_token)
+
+            # If Twitter bounces back a 200 status code, authenticate the user
+            # and return a success message
+            if response.status_code == 200:
+                auth_user_name = authenticate_user(request, response)
+                return None
+            # If 200 status code is not bounced back, return a failure message
+            else:
+                status_reason = response.reason
+                message = 'Authentication failure reason:' + status_reason + '. ' \
+                             + 'Please authorize through Twitter to log in.'
+                return render(request, 'error.html', {'error': message})
+        except KeyError:
+            print('No token found: redirect to Twitter for authorization')
+            return get_oauth_request_token(
+                lambda key, secret: redirect(build_oauth_url(key, secret)),
+                lambda message: render(request, 'error.html', {'error': message}))
 
 
 def get_oauth_request_token(callback, error):
