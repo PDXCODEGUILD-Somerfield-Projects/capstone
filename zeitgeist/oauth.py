@@ -1,9 +1,11 @@
 from django.contrib.auth.models import User
+from django.shortcuts import render
 from django.utils.decorators import make_middleware_decorator
 from requests_oauthlib import OAuth1Session
 
 from zeitgeist.db_query import pull_queries_by_user
 from zeitgeist.models import UserProfile
+from django.contrib.auth import login
 from .settings import TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET
 from json import loads
 
@@ -14,13 +16,15 @@ TWITTER_ACCESS_TOKEN_URL = 'https://api.twitter.com/oauth/access_token'
 TWITTER_VERIFY_CRED_URL = 'https://api.twitter.com/1.1/account/verify_credentials.json'
 
 
-def authenticate_user(response):
+def authenticate_user(request, response):
     # link to user if user_id exists
     user_id = response.json()['id']
     my_user = UserProfile.objects.filter(twitter_id=user_id)
     if len(my_user) != 0:
         auth_user = User.objects.get(userprofile__twitter_id=user_id)
         user_first_last = UserProfile.objects.get(user=auth_user).twitter_name
+        login(request, auth_user)
+        print(response.status_code)
         print(user_first_last)
     else:
         # if user is not in db, create a new user from twitter credentials
@@ -32,17 +36,21 @@ def authenticate_user(response):
             twitter_id=user_id,
             twitter_name=user_first_last
         ).save()
+        login(request, new_user)
+        print(response.status_code)
         print(user_first_last)
-    # return user_first_last
+    return user_first_last
 
 
 
 class TwitterOauthMiddleware(object):
 
     def process_request(self, request):
-        print("process request")
+
         # Code to be executed for each request before
         # the view (and later middleware) are called.
+
+        # Verify the user's credentials through Twitter
         twitter_token = request.COOKIES['token']
         access_token_dict = loads(twitter_token)
         oauth = OAuth1Session(
@@ -51,13 +59,19 @@ class TwitterOauthMiddleware(object):
             resource_owner_key=access_token_dict['oauth_token'],
             resource_owner_secret=access_token_dict['oauth_token_secret'])
         response = oauth.get(TWITTER_VERIFY_CRED_URL)
-        if response.status_code == 200:
-            authenticate_user(response)
 
-        print(response.status_code)
-        # print(response.json())
-        # GRAB RESPONSE AND DO SOMETHING WITH IT
-        return None
+        # If Twitter bounces back a 200 status code, authenticate the user
+        # and return a success message
+        if response.status_code == 200:
+            auth_user_name = authenticate_user(request, response)
+            return None
+        # If 200 status code is not bounced back, return a failure message
+        else:
+            status_reason = response.reason
+            message = 'Authentication failure reason:' + status_reason + '. ' \
+                         + 'Please authorize through Twitter to log in.'
+            return render(request, 'error.html', {'error': message})
+
 
 def get_oauth_request_token(callback, error):
     oauth = OAuth1Session(

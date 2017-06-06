@@ -1,7 +1,8 @@
 import json
 from datetime import datetime
 
-from django.contrib.auth import authenticate
+from django.http import HttpResponse
+from django.contrib.auth import authenticate, logout
 
 from django.shortcuts import render, redirect
 from json import loads
@@ -61,20 +62,11 @@ def coordinates(request):
                                 'twitter': twitter_list})
     return json_return
 
-def login(request):
-    username = request.POST['username']
-    password = request.POST['password']
-    user = authenticate(request, username=username, password=password)
-    if user is not None:
-        first_name = user.get_short_name()
-        message = 'login successful'
-        json_return = JsonResponse({'first_name': first_name, 'message': message})
-    else:
-        message = 'invalid login'
-        json_return = JsonResponse({'message': message})
-    return json_return
 
-
+def logout_user(request):
+    response = HttpResponse()
+    response.delete_cookie('token')
+    return response
 
 
 from django.utils.decorators import decorator_from_middleware

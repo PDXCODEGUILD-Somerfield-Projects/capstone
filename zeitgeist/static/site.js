@@ -5,34 +5,18 @@
 'use strict';
 
 
-function logIn(result) {
+function logOut() {
     return new Promise(function(resolve, reject) {
-        var username = $("#username").val();
-        var password = $("#password").val();
-        //console.log(username, password);
-        $.post('/login/', {username: username, password: password}, function(result) {
-            resolve(result);
-        });
+        $.get('/logout/')
+            .done(function(response) {
+                console.log('This worked');
+                resolve();
+            })
+            .fail(function() {
+                reject(result);
+                console.log('The promise call failed on logout.');
+            });
     })
-}
-
-
-function updateUser(result) {
-    var message = result.message;
-    //console.log(result);
-    if (message === 'login successful') {
-        var first_name = result.first_name;
-        $("#loginform").hide();
-        $("#loginmessage").hide();
-        $("#firstname").text(first_name);
-        $("#loggedin").show();
-    } else {
-        $("#username").val("");
-        $("#password").val("");
-        if ($("#loginmessage").text() !== 'invalid login') {
-            $("#loginmessage").text(message);
-        }
-    }
 }
 
 
@@ -56,13 +40,6 @@ function getUserLocation(result) {
 
 
 $(document).ready(function() {
-    $("#loginbutton").click(function() {
-       logIn().then(updateUser);
-    })
-});
-
-
-$(document).ready(function() {
     $("#startbutton").click(function() {
         $('#testdata').empty();
         $('#loading').show();
@@ -70,3 +47,11 @@ $(document).ready(function() {
     })
 });
 
+
+$(document).ready(function() {
+    $("#logoutbutton").click(function() {
+        logOut().then(function() {
+            window.location.replace('https://twitter.com/logout');
+        })
+    })
+});

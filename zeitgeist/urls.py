@@ -15,12 +15,12 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from . views import home, coordinates, authorization, login, queries, rerun, deletequery
+from . views import home, coordinates, authorization, logout_user, queries, rerun, deletequery
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^home/$', home, name='home'),
-    url(r'^login/$', login, name='login'),
+    url(r'^logout/$', logout_user, name='logout'),
     url(r'^coordinates/$', coordinates, name='coordinates'),
     url(r'^authorization/$', authorization, name='authorize'),
     url(r'^queries/$', queries, name='queries'),
