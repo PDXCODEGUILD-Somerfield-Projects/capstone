@@ -61,7 +61,8 @@ $(document).ready(function() {
             .done(function(response) {
                 $('#querydata').hide();
                 $('#testdata').show();
-                $('#close').show();
+                // $('#close').show();
+                $('#close').css('display', 'block');
                 makeBubbles(response);
             })
             .fail(function() {
