@@ -210,5 +210,7 @@ def save_search_to_db(user, twitter_list, query_datetime, p_filter, a_filter, u_
         item = sr.searchresultitem_set.create(item_text=pack_text, item_count=pack_count)
         sr_item = SearchResultItem.objects.get(id=item.id)
         # ties parcel type to the search results item object
-        pt = sr_item.parceltype_set.create(parcel_type=pack_parcel)
+        # pt = sr_item.parceltype_set.create(parcel_type=pack_parcel)
+        pt = ParcelType(search_result_item=sr_item, parcel_type=pack_parcel)
+        pt.save()
 
