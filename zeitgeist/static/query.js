@@ -61,7 +61,6 @@ $(document).ready(function() {
             .done(function(response) {
                 $('#querydata').hide();
                 $('#testdata').show();
-                // $('#close').show();
                 $('#close').css('display', 'block');
                 makeBubbles(response);
             })
@@ -74,6 +73,7 @@ $(document).ready(function() {
 
 $(document).ready(function() {
     $('#close').click(function() {
+        $('svg').remove();
         $('#testdata').hide();
         $('#close').hide();
         $('#querydata').show();
