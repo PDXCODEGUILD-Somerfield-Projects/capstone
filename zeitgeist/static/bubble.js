@@ -97,8 +97,8 @@ function makeBubbles(dataReturn) {
             .attr("dy", ".35em");
 
 
-        $('#bubbles').after('<p>lat: ' + dataReturn['lat'] + '</p>'
-            + '<p>' + 'lng: ' + dataReturn['lng'] + '</p>');
+        $('#lat-long').after('<p id="lat-long-display">latitude: ' + dataReturn['lat'] + '&nbsp;&nbsp;&nbsp;'
+            + 'longitude: ' + dataReturn['lng'] + '</p>');
 }
 
 // function testForNow(result){

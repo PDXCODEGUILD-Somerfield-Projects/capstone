@@ -74,6 +74,7 @@ $(document).ready(function() {
 $(document).ready(function() {
     $('#close').click(function() {
         $('svg').remove();
+        $('#lat-long-display').remove();
         $('#testdata').hide();
         $('#close').hide();
         $('#querydata').show();
