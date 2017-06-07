@@ -16,6 +16,8 @@ function passLatLong(result) {
 
 function makeBubbles(dataReturn) {
     //console.log(dataReturn);
+
+
         var twitter_data = dataReturn.twitter;
         //console.log(twitter_data);
 
@@ -38,6 +40,7 @@ function makeBubbles(dataReturn) {
         var pack = d3.pack()
             .size([diameter, diameter])
             .padding(1.5);
+
 
         var svg = d3.select("#testdata").append("svg")
             .attr("width", diameter)

@@ -18,23 +18,21 @@ h1 {
 
 
 #close {
-    /*display: none;*/
-
     display: none;
-    box-sizing:border-box;
-    width:20px;
-    height:20px;
-    border-width:3px;
-    border-style: solid;
-    border-color: grey;
-    border-radius:100%;
-    background: -webkit-linear-gradient(-45deg, transparent 0%, transparent 46%, white 46%,  white 56%,transparent 56%, transparent 100%), -webkit-linear-gradient(45deg, transparent 0%, transparent 46%, white 46%,  white 56%,transparent 56%, transparent 100%);
-    background-color:lightgrey;
-    /*box-shadow:1px 1px 1px 1px rgba(0,0,0,0.5);*/
-    transition: all 0.3s ease;
-    margin-left: 5%;
+    cursor: default;
+    font-family: Garamond, 'Apple Garamond', "Lucida Sans Unicode";
+    font-size: 250%;
+    color: grey;
+    float: right;
+    margin-right: 5%;
+}
 
-
+#close:hover {
+    color: whitesmoke;
+    display: block;
+    background-color: lightgrey;
+    padding-left: 1.5%;
+    padding-right: 1.5%;
 }
 
 
