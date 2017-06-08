@@ -45,6 +45,11 @@ th, td {
     background-color: transparent;
 }
 
+#lat-long-display {
+    display: inline-block;
+    white-space: nowrap;
+}
+
 
 .circle text {
     fill: black;

@@ -96,7 +96,7 @@ function makeBubbles(dataReturn) {
             })
             .attr("dy", ".35em");
 
-
+        $('#loading').hide();
         $('#lat-long').after('<p id="lat-long-display">latitude: ' + dataReturn['lat'] + '&nbsp;&nbsp;&nbsp;'
             + 'longitude: ' + dataReturn['lng'] + '</p>');
 }

@@ -42,6 +42,7 @@ function getUserLocation(result) {
 $(document).ready(function() {
     $("#startbutton").click(function() {
         $('#testdata').empty();
+        $('#lat-long-display').remove();
         $('#loading').show();
         getUserLocation().then(passLatLong);
     })
